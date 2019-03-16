@@ -14,7 +14,9 @@ class MediaController extends Controller
      */
     public function index()
     {
-        //
+        $media = Media::with(['user', 'commments'])->withCount('likes')->get();
+
+        return view('media.index', compact($media));
     }
 
     /**
@@ -24,7 +26,7 @@ class MediaController extends Controller
      */
     public function create()
     {
-        //
+        return view('media.create');        
     }
 
     /**
@@ -46,7 +48,7 @@ class MediaController extends Controller
      */
     public function show(Media $media)
     {
-        //
+        return view('media.show');        
     }
 
     /**
@@ -57,7 +59,7 @@ class MediaController extends Controller
      */
     public function edit(Media $media)
     {
-        //
+        return view('media.edit');        
     }
 
     /**

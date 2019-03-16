@@ -54,6 +54,10 @@ class User extends Authenticatable
         return $this->belongsToMany(Media::class, 'comments');
     }
 
+    public function likes() {
+        return $this->hasMany(Like::class);
+    }
+
     public function likedMedia() {
         return $this->belongsToMany(Media::class, 'likes');
     }

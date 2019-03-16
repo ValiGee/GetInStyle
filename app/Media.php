@@ -24,6 +24,10 @@ class Media extends Model
         return $this->belongsToMany(User::class, 'comments');
     }
 
+    public function likes() {
+        return $this->hasMany(Like::class);
+    }
+
     public function likingUsers() {
         return $this->belongsToMany(User::class, 'likes');
     }

@@ -11,4 +11,12 @@
 |
 */
 
-// Route::get('/', );
+Route::get('/', [
+    'uses' => 'MediaController@index',
+    'as' => 'media.index',
+]);
+
+Route::get('/media', [
+    'uses' => 'MediaController@index',
+    'as' => 'media.index',
+]);
