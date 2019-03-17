@@ -2,9 +2,24 @@
 
 @section('content')
     <!-- Display photos -->
-    <b>Pozele sunt dummy data generate cu JS, de aia se incarca mai greu</b>
     <div id="photos-container">
-
+        @foreach($media as $_media)
+            <div class="panel panel-flat animation" data-animation="bounceInLeft" style="visibility: visible;">
+                <div class="panel-body">
+                    <img src={{ URL::asset($_media["stylized_path"]) }}>
+                </div>
+                <div class="panel-footer panel-footer-condensed">
+                    <div class="heading-elements not-collapsible">
+                        <ul class="list-inline list-inline-separate heading-text text-muted">
+                            <li>
+                                <a href="#" class="text-muted"><i class="icon-heart6 text-size-base text-pink position-left"></i>14</a>
+                            </li>
+                        </ul>
+                        <a href="#" class="heading-text pull-right"><i class="icon-comments position-right"></i> 5</a>
+                    </div>
+                </div>
+            </div>
+        @endforeach
     </div>
     <!-- /Display photos -->
 @endsection
@@ -68,9 +83,6 @@
 
 
     #photos-container .panel {
-        margin-bottom: 5px;
-        margin-right: 5px;
-
         display: inline-block;
         width: 100%;
     }
@@ -127,54 +139,7 @@
         }
 
         window.onload = function(e) {
-            let photosContainer = $('#photos-container');
-            let animations = ["fadeInDownBig", "bounceInRight", "bounceInLeft", "lightSpeedIn", "rotateIn"];
 
-            for (let i = 0; i < 25; i++) {
-                let width = getRandomSize(200, 400);
-                let height =  getRandomSize(200, 400);
-
-                let divPanel = document.createElement("DIV");
-                divPanel.classList.add("panel");
-                divPanel.classList.add("panel-flat");
-                divPanel.classList.add("animation");
-                divPanel.dataset.animation = animations[Math.floor(Math.random()*animations.length)];
-
-                let divPanelBody = document.createElement("DIV");
-                divPanelBody.classList.add("panel-body");
-
-                divPanel.appendChild(divPanelBody);
-
-                let divPanelFooter = document.createElement("DIV");
-                divPanelFooter.classList.add("panel-footer");
-                divPanelFooter.classList.add("panel-footer-condensed");
-
-                divPanel.appendChild(divPanelFooter);
-
-                let img = document.createElement("IMG");
-                img.src = "https://placekitten.com/" + width + "/" + height;
-
-                divPanelBody.appendChild(img);
-
-                divPanelFooter.innerHTML = '<div class="heading-elements not-collapsible">\n' +
-                    '<ul class="list-inline list-inline-separate heading-text text-muted">\n' +
-                    '<li><a href="#" class="text-muted"><i class="icon-heart6 text-size-base text-pink position-left"></i>' +
-                    getRandomSize(0, 100) +
-                    '</a></li>\n' +
-                    '</ul>\n' +
-                    '<a href="#" class="heading-text pull-right"><i class="icon-comments position-right"></i> ' +
-                    getRandomSize(0, 100) +
-                    '</a>\n' +
-                    '</div>';
-
-                photosContainer.append(divPanel);
-
-                if (img.complete) {
-                    imgLoaded(img)
-                } else {
-                    img.addEventListener('load', imgLoaded)
-                }
-            }
         }
     </script>
 @endpush
