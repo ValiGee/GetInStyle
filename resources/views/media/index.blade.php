@@ -36,11 +36,11 @@
         line-height: 0;
 
         -webkit-column-count: 5;
-        -webkit-column-gap:   0;
+        -webkit-column-gap:   5px;
         -moz-column-count:    5;
-        -moz-column-gap:      0;
+        -moz-column-gap:      5px;
         column-count:         5;
-        column-gap:           0;
+        column-gap:           5px;
     }
 
     #photos-container img {
@@ -83,8 +83,11 @@
 
 
     #photos-container .panel {
+        /* Following 2 lines make panel as a whole unit, so they don't split on separate columns */
         display: inline-block;
         width: 100%;
+        /* Override property from bootstrap for visual aspect of panels stacked vertically . Default is 20px */
+        margin-bottom: 5px;
     }
 
     #photos-container .panel:hover {
