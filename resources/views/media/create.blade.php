@@ -14,37 +14,37 @@
             @endforeach
         </div>
 
-        <form id="main-form" action="#">
-            <div id="stages-container" class="row">
-                <div id="first-stage-container" class="row">
-                    <div class="col-md-4"></div>
-                    <div class="col-md-4">
-                        <div id="chosen-style-container">
-                            <div class="thumbnail no-padding">
-                                <div class="thumb">
-                                    <img src="{{ URL::asset('styles/la_muse_resized.jpg') }}" alt="">
-                                    <div class="caption-overflow">
-                            <span>
-                                <h5 id="chosen-style-name"></h5>
-                            </span>
-                                    </div>
+        <div id="stages-container" class="row">
+            <div id="first-stage-container" class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                    <div id="chosen-style-container">
+                        <div class="thumbnail no-padding">
+                            <div class="thumb">
+                                <img src="{{ URL::asset('styles/la_muse_resized.jpg') }}" alt="">
+                                <div class="caption-overflow">
+                        <span>
+                            <h5 id="chosen-style-name"></h5>
+                        </span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4"></div>
                 </div>
-                <div class="row">
-                    <div class="col-md-12 center-container">
-                        <button class="btn btn-info">+</button>
-                    </div>
+                <div class="col-md-4"></div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 center-container">
+                    <button class="btn btn-info">+</button>
                 </div>
+            </div>
+            <form id="main-form" action="#">
                 <div id="second-stage-container" class="row">
                     <div class="col-md-12">
                         <!-- Single file upload -->
                         <div class="file-upload">
                             <div class="image-upload-wrap">
-                                <input type="hidden" name="styleId" id="styleIdInput" value="" />
+                                <input type="hidden" name="style_id" id="styleIdInput" value="" />
                                 <input name="userPhoto" class="file-upload-input" type='file' onchange="readURL(this);" accept="image/*" />
                                 <div class="drag-text">
                                     <h3>Drag and drop a file or select add Image</h3>
@@ -65,8 +65,8 @@
                         <button id="submitFormButton" class="btn btn-info">Submit</button>
                     </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 @endsection
 
@@ -354,18 +354,21 @@
                 });
 
                 let URL = $(this).attr('action');
-                $('#loadingIcon').toggleClass('loading');
-                return false;
+                $('#loadingIcon').toggleClass('loading'); //activate the loading screen
+
                 $.ajax({
                     url: URL,
                     type: 'post',
                     data: formData, // Remember that you need to have your csrf token included
-                    dataType: 'json',
+                    processData: false,
+                    contentType: false,
                     success:function(response){
                         console.log(response);
+                        $('#loadingIcon').toggleClass('loading'); //deactivate the loading screen
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown) {
                         alert("Status: " + textStatus); alert("Error: " + errorThrown);
+                        $('#loadingIcon').toggleClass('loading'); //deactivate the loading screen
                     }
                 });
             });
