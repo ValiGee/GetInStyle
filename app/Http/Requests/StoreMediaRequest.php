@@ -13,7 +13,6 @@ class StoreMediaRequest extends FormRequest
      */
     public function authorize()
     {
-        dd('here');
         return true;
     }
 

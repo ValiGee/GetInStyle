@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use App\Http\Requests\StoreMediaRequest;
+use Auth;
+use Storage;
 
 class MediaController extends Controller
 {
@@ -43,14 +45,15 @@ class MediaController extends Controller
      */
     public function store(StoreMediaRequest $request)
     {
-        $imagePath = $request->userPhoto->store('media_upload', 'public');
-        $imageRelativePath = substr($imagePath, strpos($imagePath, 'media_upload'));
+        $imagePath = 'storage/' . $request->file('userPhoto')->store('media_upload', 'public');
         $style = Style::find($request->style_id);
-        $stylizedImagePath = "stylized-images/" . str_random() . '.jpg';
-        $process = new Process('python3 ' . base_path() . '/style_transfer.py --model ' . base_path($style->model_path) . " --image $imagePath --output " . storage_path($stylizedImagePath));
+        $stylizedImagePath = "storage/media_stylized/" . str_random() . '.jpg';
+        // dd('python3 ' . base_path() . '/style_transfer.py --model ' . base_path($style->model_path) . " --image " . public_path("$imagePath") . " --output " . public_path("$stylizedImagePath"));
+        $process = new Process('python3 ' . base_path() . '/style_transfer.py --model ' . base_path($style->model_path) . " --image " . public_path("$imagePath") . " --output " . public_path("$stylizedImagePath"));
         $process->run();
 
         if (!$process->isSuccessful()) {
+            throw new ProcessFailedException($process);
             return view('errors.media');
         }
 
@@ -58,15 +61,16 @@ class MediaController extends Controller
             $media = Media::create([
                 'user_id' => Auth::id(),
                 'style_id' => $style->id,
-                'path' => $imageRelativePath,
+                'path' => $imagePath,
                 'stylized_path' => $stylizedImagePath,
             ]);
 
             return redirect()->route('media.show', ['id' => $media->id]);
         } else {
-            Storage::disk('public')->delete($imageRelativePath);
-            
-            return Storage::download(asset($stylizedImagePath))->deleteFileAfterSend(true);
+            // dd($stylizedImagePath);
+            Storage::disk('public')->delete($imagePath);
+            // dd(public_path($stylizedImagePath));
+            return response()->download(public_path($stylizedImagePath), 'style.jpg', ['Content-Type: ' => 'image/jpeg']);
         }
     }
 
