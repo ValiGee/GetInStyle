@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
+    tools:context=".MainActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:orientation="vertical"
+            android:layout_margin="8dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato_black"
+                android:paddingLeft="10dp"
+                android:paddingTop="30dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="20dp"
+                android:text="@string/logInTitle"
+                android:textAlignment="center"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/colorPrimaryLight"
+                android:textSize="30sp" />
+
+            <EditText
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="5dp"
+                android:autofillHints="@string/logEmailAutoFill"
+                android:background="@color/colorPrimaryLight"
+                android:drawableLeft="@drawable/ic_account_circle_black_24dp"
+                android:ems="10"
+                android:fontFamily="@font/lato_black"
+                android:inputType="textPersonName"
+                android:padding="10dp"
+                android:text="Email"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimaryDark" />
+
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/colorPrimaryLight"
+                android:ems="10"
+                android:fontFamily="@font/lato_bold"
+                android:inputType="textPassword"
+                android:padding="10dp"
+                android:text="Password"
+                android:textAlignment="center"
+                android:drawableLeft="@drawable/ic_vpn_key_black_24dp"
+                android:textColor="@color/colorPrimaryDark" />
+
+            <Button
+                android:id="@+id/logInButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/colorAccent"
+                android:textColor="@color/colorPrimaryLight"
+                android:textAlignment="center"
+                android:fontFamily="@font/lato_bold"
+                android:padding="10dp"
+                android:text="@string/logInButtonTitle" />
+
+            <Button
+                android:id="@+id/LogInFacebookButon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/facebookColor"
+                android:textColor="@color/colorPrimaryLight"
+                android:textAlignment="center"
+                android:fontFamily="@font/lato_bold"
+                android:padding="10dp"
+                android:drawableStart="@drawable/ic_facebook"
+                android:text="@string/logInWithFacebookButtonTitle" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical"
+            android:layout_margin="8dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato_bold"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="20dp"
+                android:text="@string/signUpMessage"
+                android:textAlignment="center"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/colorPrimaryLight"
+                android:textSize="15sp" />
+
+            <Button
+                android:id="@+id/SignInButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="50dp"
+                android:layout_marginBottom="25dp"
+                android:background="@color/colorAccent"
+                android:fontFamily="@font/lato_black"
+                android:textSize="15sp"
+                android:padding="5dp"
+                android:text="@string/signUpButtonTitle"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimaryLight" />
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>
