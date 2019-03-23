@@ -67,10 +67,8 @@ class MediaController extends Controller
 
             return redirect()->route('media.show', ['id' => $media->id]);
         } else {
-            // dd($stylizedImagePath);
-            Storage::disk('public')->delete($imagePath);
-            // dd(public_path($stylizedImagePath));
-            return response()->download(public_path($stylizedImagePath), 'style.jpg', ['Content-Type: ' => 'image/jpeg']);
+            Storage::disk('public')->delete(substr($imagePath, strpos($imagePath, 'media_upload')));
+            return response()->download(public_path($stylizedImagePath))->deleteFileAfterSend(true);
         }
     }
 
