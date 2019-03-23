@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Style extends Model
 {
-    public $fillable = ['name', 'path'];
+    public $fillable = ['name', 'model_path', 'image_path'];
     
     public function media() {
         return $this->hasMany(Media::class);

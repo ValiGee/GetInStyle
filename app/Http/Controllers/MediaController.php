@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Media;
 use Illuminate\Http\Request;
+use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class MediaController extends Controller
 {
@@ -25,7 +27,7 @@ class MediaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
+    {   
         return view('media.create');        
     }
 
@@ -37,7 +39,14 @@ class MediaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $process = new Process('python3 ' . base_path() . '/style_transfer.py --model ' . base_path() . '/models/eccv16/starry_night.t7 --image ' . public_path() . '/images/1.jpg --output ' . public_path() . '/stylized-images/out2.jpg');
+        $process->run();
+        // executes after the command finishes
+        if (!$process->isSuccessful()) {
+            throw new ProcessFailedException($process);
+        }
+
+        echo $process->getOutput();
     }
 
     /**

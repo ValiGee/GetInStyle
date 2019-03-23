@@ -20,3 +20,5 @@ Route::get('/media', [
     'uses' => 'MediaController@index',
     'as' => 'media.index',
 ]);
+
+Route::resource('media', 'MediaController');
