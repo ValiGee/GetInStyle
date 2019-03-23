@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Media;
+use App\Style;
 use Illuminate\Http\Request;
 
 class MediaController extends Controller
@@ -26,7 +27,8 @@ class MediaController extends Controller
      */
     public function create()
     {
-        return view('media.create');        
+        $styles = Style::all();
+        return view('media.create', compact('styles'));
     }
 
     /**
