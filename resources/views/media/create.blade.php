@@ -9,7 +9,7 @@
             <!-- Carousel items follow -->
             @foreach($styles as $style)
                 <div class="kc-item">
-                        <a href="#" onclick="return pickedStyle(event, {{ $style }})"><img src="{{ URL::asset('styles/la_muse_resized.jpg') }}" alt="{{ $style["name"] }}"></a>
+                        <a href="#" onclick="return pickedStyle(event, {{ $style }})"><img src="{{ URL::asset($style["image_path"]) }}" alt="{{ $style["name"] }}"></a>
                 </div>
             @endforeach
         </div>
@@ -21,7 +21,7 @@
                     <div id="chosen-style-container">
                         <div class="thumbnail no-padding">
                             <div class="thumb">
-                                <img src="{{ URL::asset('styles/la_muse_resized.jpg') }}" alt="">
+                                <img id="chosen-style-image" src="" alt="">
                                 <div class="caption-overflow">
                         <span>
                             <h5 id="chosen-style-name"></h5>
@@ -388,6 +388,10 @@
 
             //4. Add the name of the chosen style to be visible when hovering over the image
             $('#chosen-style-name').text(style.name);
+
+            //5. Add the image of the chosen style
+            var app_base_path = "{{ URL::to('/') }}";
+            $('#chosen-style-image').attr('src', app_base_path + '/' + style.image_path);
 
             return false; //using return here and in html in order to not change the url
         }
