@@ -38,7 +38,7 @@
                     <button class="btn btn-info">+</button>
                 </div>
             </div>
-            <form id="main-form" action="#">
+            <form id="main-form" action="{{ route('media.store') }}">
                 <div id="second-stage-container" class="row">
                     <div class="col-md-12">
                         <!-- Single file upload -->
