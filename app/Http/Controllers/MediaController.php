@@ -7,6 +7,7 @@ use App\Style;
 use Illuminate\Http\Request;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
+use App\Http\Requests\StoreMediaRequest;
 
 class MediaController extends Controller
 {
@@ -40,16 +41,33 @@ class MediaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreMediaRequest $request)
     {
-        $process = new Process('python3 ' . base_path() . '/style_transfer.py --model ' . base_path() . '/models/eccv16/starry_night.t7 --image ' . public_path() . '/images/1.jpg --output ' . public_path() . '/stylized-images/out2.jpg');
+        $imagePath = $request->userPhoto->store('media_upload', 'public');
+        $imageRelativePath = substr($imagePath, strpos($imagePath, 'media_upload'));
+        $style = Style::find($request->style_id);
+        $stylizedImagePath = "stylized-images/" . str_random() . '.jpg';
+        $process = new Process('python3 ' . base_path() . '/style_transfer.py --model ' . base_path($style->model_path) . " --image $imagePath --output " . storage_path($stylizedImagePath));
         $process->run();
-        // executes after the command finishes
+
         if (!$process->isSuccessful()) {
-            throw new ProcessFailedException($process);
+            return view('errors.media');
         }
 
-        echo $process->getOutput();
+        if (Auth::check()) {
+            $media = Media::create([
+                'user_id' => Auth::id(),
+                'style_id' => $style->id,
+                'path' => $imageRelativePath,
+                'stylized_path' => $stylizedImagePath,
+            ]);
+
+            return redirect()->route('media.show', ['id' => $media->id]);
+        } else {
+            Storage::disk('public')->delete($imageRelativePath);
+            
+            return Storage::download(asset($stylizedImagePath))->deleteFileAfterSend(true);
+        }
     }
 
     /**
