@@ -61,6 +61,7 @@
 <!-- Theme JS files -->
 <script type="text/javascript" src="{{ URL::asset('limitless/assets/js/plugins/ui/prism.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('limitless/assets/js/core/app.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('limitless/assets/js/pages/components_popups.js') }}"></script>
 <!-- /theme JS files -->
 
 @stack('js')
