@@ -116,4 +116,12 @@ class MediaController extends Controller
     {
         //
     }
+
+    public function photosByUserId($user_id)
+    {
+        $photos = Auth::user()->media()->get();
+        //$media = Media::with['user_id' -> $user_id];
+        return view('media.photosByUserId', $photos);
+        //return view('media.photosByUserId', $media);
+    }
 }

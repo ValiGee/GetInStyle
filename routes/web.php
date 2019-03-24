@@ -10,6 +10,11 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+namespace App\Http\Controllers;
+
+use Illuminate\Routing\Controller;
+use Auth;
+use Route;
 
 Route::get('/', [
     'uses' => 'MediaController@index',
@@ -17,3 +22,8 @@ Route::get('/', [
 ]);
 
 Route::resource('media', 'MediaController');
+
+Route::group(['middleware' => ['web', 'auth']], function () {
+    $user_id = Auth::id();
+    Route::get('media/photosByUserId/{user_id}', ['as' => 'media.photosByUserId', 'uses' => 'MediaController@photosByUserId']);
+});
