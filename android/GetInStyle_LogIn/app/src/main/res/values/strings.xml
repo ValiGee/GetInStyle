@@ -1,9 +1,17 @@
 <resources>
     <string name="app_name">GetInStyle</string>
     <string name="logInTitle">Welcome!\nAre you ready to\nGet in style?</string>
-    <string name="logEmailAutoFill">somebody@domain.com</string>
+    <string name="logEmailAutoFill">Email</string>
     <string name="logInButtonTitle">Log In</string>
     <string name="logInWithFacebookButtonTitle">Log In with Facebook</string>
     <string name="signUpMessage">Don\'t have an account?\nNo prob...</string>
     <string name="signUpButtonTitle" >Sign Up</string>
+    <string name="passwordAutoFill">Password</string>
+    <string name="signUpTitle" >SIGN UP</string>
+    <string name="signUpSubtitle">It\'s free and always will be</string>
+    <string name="firstNameAutoFill">First Name</string>
+    <string name="lastNameAutoFill">Last Name</string>
+    <string name="createAccountButtonTitle">Create Account</string>
+    <string name="birthdayText">Birthday</string>
+    <string name="dayPrompt">Day</string>
 </resources>

@@ -10,6 +10,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -41,10 +42,10 @@
                 android:layout_marginBottom="5dp"
                 android:autofillHints="@string/logEmailAutoFill"
                 android:background="@color/colorPrimaryLight"
-                android:drawableLeft="@drawable/ic_account_circle_black_24dp"
+                android:drawableLeft="@drawable/ic_email_black_24dp"
                 android:ems="10"
                 android:fontFamily="@font/lato_black"
-                android:inputType="textPersonName"
+                android:inputType="textEmailAddress"
                 android:padding="10dp"
                 android:text="Email"
                 android:textAlignment="center"
@@ -123,7 +124,8 @@
                 android:textSize="15sp" />
 
             <Button
-                android:id="@+id/SignInButton"
+                android:id="@+id/SignUpButton"
+                android:onClick="signUpButtonOnClick"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="50dp"
@@ -137,8 +139,8 @@
                 android:text="@string/signUpButtonTitle"
                 android:textAlignment="center"
                 android:textColor="@color/colorPrimaryLight" />
-        </LinearLayout>
 
+        </LinearLayout>
 
     </RelativeLayout>
 
