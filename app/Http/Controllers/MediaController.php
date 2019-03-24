@@ -80,7 +80,7 @@ class MediaController extends Controller
      */
     public function show(Media $media)
     {
-        return view('media.show');        
+        return view('media.show', compress('media'));        
     }
 
     /**
@@ -91,7 +91,7 @@ class MediaController extends Controller
      */
     public function edit(Media $media)
     {
-        return view('media.edit');        
+        return view('media.edit', compress('media'));        
     }
 
     /**
