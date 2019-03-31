@@ -130,12 +130,18 @@
                         message: _message
                     };
 
+                    let csrf = $('meta[name="csrf-token"]').attr('content');
+
                     console.log(_data);
                     console.log(route);
+                    console.log(csrf);
 
                     $.ajax({
                         type: "POST",
                         url: route,
+                        headers: {
+                            'X-CSRF-TOKEN': csrf
+                        },
                         data: _data,
                         success: function(resp) {
                             console.log(resp);

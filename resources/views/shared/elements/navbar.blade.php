@@ -14,24 +14,34 @@
             <li><a href="{{ route('media.create') }}">Stylize</a></li>
         </ul>
 
-        <div class="navbar-right">
-            <ul class="nav navbar-nav">
-
+        <ul class="nav navbar-nav navbar-right">
+            @if(Auth::guest())
+                <li><a href="{{ route('login') }}">Log in</a></li>
+                <li><a href="{{ route('register') }}">Register</a></li>
+            @else
                 <li class="dropdown dropdown-user">
                     <a class="dropdown-toggle" data-toggle="dropdown">
-                        <img src="{{ URL::asset('limitless/assets/images/placeholder.jpg') }}" alt="">
-                        <span>Victoria</span>
+                        <img src="{{ URL::asset('limitless/assets/images/placeholder.jpg') /*TODO: add avatar to users*/ }}" alt="">
+                        <span>{{ Auth::user()->name }}</span>
                         <i class="caret"></i>
                     </a>
 
                     <ul class="dropdown-menu dropdown-menu-right">
                         {{--<li><a href="{{ url('../media/photosByUserId/'. ['user_id' => $user->id]) }}"><i class="icon-user-plus"></i> My profile</a></li>--}}
-                        <li><a href="#"><i class="icon-cog5"></i> Account settings</a></li>
-                        <li><a href="#"><i class="icon-switch2"></i> Logout</a></li>
+                        <li>
+                            <a href="{{ route('logout') }}"
+                               onclick="event.preventDefault();
+                                        document.getElementById('logout-form').submit();">
+                                <i class="icon-switch2"></i> Logout
+                            </a>
+                        </li>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST">
+                            @csrf
+                        </form>
                     </ul>
                 </li>
-            </ul>
-        </div>
+            @endif
+        </ul>
     </div>
 </div>
 <!-- /main navbar -->
