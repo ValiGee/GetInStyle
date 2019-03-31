@@ -39,12 +39,9 @@
                                 <div class="media-body">
                                     <div class="media-heading">
                                         <a href="#" class="text-semibold">{{ $comment->user->name }}</a>
-                                        <span class="media-annotation dotted">
-                                    @php
-                                        $date = new DateTime($comment->created_at);
-                                        echo $date->format('Y-m-d  H:i:s');
-                                    @endphp
-                                </span>
+                                        <span class="comment-date media-annotation dotted" style="display: none">
+                                            {{ $comment->created_at }}
+                                        </span>
                                     </div>
 
                                     <p>{!! $comment->message /* parse the string as html */ !!}</p>
@@ -92,10 +89,17 @@
 @push('js')
     <!-- Theme JS files -->
     <script type="text/javascript" src="{{ URL::asset('limitless/assets/ckeditor/ckeditor.js') }}"></script>
+    <script type="text/javascript" src="{{ URL::asset('limitless/assets/js/prettyDate.js') }}"></script>
     <!-- /theme JS files -->
 
     <script type="text/javascript">
         $(function() { // On document ready
+            // Comment dates
+            $('.comment-date').each(function(i) {
+                this.innerText = prettyDate(this.innerText);
+                this.style.display = 'inline-block';
+            });
+
             // CKEditor
             var userId = @php if(Auth::guest()) echo -1; else echo $userId; @endphp;
 
