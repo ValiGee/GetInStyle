@@ -6,7 +6,7 @@
         @foreach($media as $_media)
             <div class="panel panel-flat animation" data-animation="bounceInLeft" style="visibility: visible;">
                 <div class="panel-body">
-                    <img src={{ URL::asset($_media["stylized_path"]) }}>
+                    <a href="{{ route('media.show', ['media_id' => $_media["id"]]) }}" onclick="fixAnchorTagClick(event)"><img src={{ URL::asset($_media["stylized_path"]) }}></a>
                 </div>
                 <div class="panel-footer panel-footer-condensed">
                     <div class="heading-elements not-collapsible">
@@ -121,6 +121,10 @@
     <script type="text/javascript" src="{{ URL::asset('limitless/assets/js/core/libraries/jquery_ui/touch.min.js') }}"></script>
 
     <script type="text/javascript">
+        function fixAnchorTagClick(e) { //Fara event listener nu se deschidea link-ul
+            window.location.href = e.currentTarget.href;
+        }
+
         function getRandomSize(min, max) {
             return Math.round(Math.random() * (max - min) + min);
         }

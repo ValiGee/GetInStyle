@@ -35,7 +35,16 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $comment = Comment::create([
+            'user_id' => $request->user_id,
+            'media_id' => $request->media_id,
+            'message' => $request->message
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Comment created successfully'
+        ]);
     }
 
     /**
@@ -46,7 +55,7 @@ class CommentController extends Controller
      */
     public function show(Comment $comment)
     {
-        //
+
     }
 
     /**

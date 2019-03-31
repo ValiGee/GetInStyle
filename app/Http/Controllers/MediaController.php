@@ -78,9 +78,12 @@ class MediaController extends Controller
      * @param  \App\Media  $media
      * @return \Illuminate\Http\Response
      */
-    public function show(Media $media)
+    public function show($media_id)
     {
-        return view('media.show');        
+        $media = Media::find($media_id);
+        $userId = Auth::id();
+
+        return view('media.show', compact('media', 'userId'));
     }
 
     /**
@@ -91,7 +94,7 @@ class MediaController extends Controller
      */
     public function edit(Media $media)
     {
-        return view('media.edit');        
+        return view('media.edit');
     }
 
     /**

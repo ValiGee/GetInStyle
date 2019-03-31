@@ -18,12 +18,26 @@ use Route;
 
 Route::get('/', [
     'uses' => 'MediaController@index',
-    'as' => 'media.index',
+    'as' => '/',
 ]);
 
 Route::resource('media', 'MediaController');
+
+Route::get('media/show/{media_id}', [
+    'uses' => 'MediaController@show',
+    'as' => 'media.show'
+]);
+
+Route::post('comments/store', [
+    'uses' => 'CommentController@store',
+    'as' => 'comments.store'
+]);
+
 
 Route::group(['middleware' => ['web', 'auth']], function () {
     $user_id = Auth::id();
     Route::get('media/photosByUserId/{user_id}', ['as' => 'media.photosByUserId', 'uses' => 'MediaController@photosByUserId']);
 });
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
