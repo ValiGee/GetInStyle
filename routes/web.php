@@ -41,12 +41,6 @@ Route::post('media', [
     'as' => 'media.store'
 ]);
 
-Route::post('comments/store', [
-    'uses' => 'CommentController@store',
-    'as' => 'comments.store'
-]);
-
-
 Route::group(['middleware' => ['web', 'auth']], function () {
     $user_id = Auth::id();
     Route::get('media/photosByUserId/{user_id}', ['as' => 'media.photosByUserId', 'uses' => 'MediaController@photosByUserId']);
@@ -54,6 +48,21 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     Route::delete('media/{media}', [
         'uses' => 'MediaController@delete',
         'as' => 'media.delete'
+    ]);
+
+    Route::post('comments/store', [
+        'uses' => 'CommentController@store',
+        'as' => 'comments.store'
+    ]);
+
+    Route::post('media/{media}/like', [
+        'as' => 'media.like',
+        'uses' => 'MediaController@toggleLike',
+    ]);
+
+    Route::post('comments/{comment}/like', [
+        'as' => 'comments.like',
+        'uses' => 'CommentsController@toggleLike',
     ]);
 });
 

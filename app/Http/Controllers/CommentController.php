@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Comment;
 use Illuminate\Http\Request;
+use App\Like;
 
 class CommentController extends Controller
 {
@@ -90,5 +91,13 @@ class CommentController extends Controller
     public function destroy(Comment $comment)
     {
         //
+    }
+
+    public function toggleLike(Comment $comment)
+    {
+        $like = new Like(['created_at' => now(), 'updated_at' => now(), 'user_id' => Auth::id()]);
+        $comment->likes()->toggle($like);
+
+        return true;
     }
 }

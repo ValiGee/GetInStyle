@@ -25,10 +25,6 @@ class Media extends Model
     }
 
     public function likes() {
-        return $this->hasMany(Like::class);
-    }
-
-    public function likingUsers() {
-        return $this->belongsToMany(User::class, 'likes');
+        return $this->morphMany(Like::class, 'likable');
     }
 }

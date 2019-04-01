@@ -10,6 +10,7 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 use App\Http\Requests\StoreMediaRequest;
 use Auth;
 use Storage;
+use App\Like;
 
 class MediaController extends Controller
 {
@@ -122,5 +123,13 @@ class MediaController extends Controller
         //$media = Media::with['user_id' -> $user_id];
         return view('media.photosByUserId', $photos);
         //return view('media.photosByUserId', $media);
+    }
+
+    public function toggleLike(Media $media)
+    {
+        $like = new Like(['created_at' => now(), 'updated_at' => now(), 'user_id' => Auth::id()]);
+        $media->likes()->toggle($like);
+
+        return true;
     }
 }
