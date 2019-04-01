@@ -68,6 +68,7 @@
                 </div>
             </form>
         </div>
+        <img id="schimbaAici"/>
     </div>
 @endsection
 
@@ -363,8 +364,8 @@
                     data: formData, // Remember that you need to have your csrf token included
                     processData: false,
                     contentType: false,
-                    success:function(response){
-                        console.log(response);
+                    success:function(response, status, xhr){
+                        $('#schimbaAici').attr('src', response);
                         $('#loadingIcon').toggleClass('loading'); //deactivate the loading screen
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown) {

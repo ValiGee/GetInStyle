@@ -47,8 +47,8 @@ class MediaController extends Controller
     {
         $imagePath = 'storage/' . $request->file('userPhoto')->store('media_upload', 'public');
         $style = Style::find($request->style_id);
-        $stylizedImagePath = "storage/media_stylized/" . str_random() . '.jpg';
-        // dd('python3 ' . base_path() . '/style_transfer.py --model ' . base_path($style->model_path) . " --image " . public_path("$imagePath") . " --output " . public_path("$stylizedImagePath"));
+        $stylizedImagePath = "storage/media_stylized/" . (Auth::check() ? '' : 'temp_') . str_random() . '.jpg';
+        
         $process = new Process('python3 ' . base_path() . '/style_transfer.py --model ' . base_path($style->model_path) . " --image " . public_path("$imagePath") . " --output " . public_path("$stylizedImagePath"));
         $process->run();
 
@@ -64,12 +64,11 @@ class MediaController extends Controller
                 'path' => $imagePath,
                 'stylized_path' => $stylizedImagePath,
             ]);
-
-            return redirect()->route('media.show', ['id' => $media->id]);
         } else {
             Storage::disk('public')->delete(substr($imagePath, strpos($imagePath, 'media_upload')));
-            return response()->download(public_path($stylizedImagePath))->deleteFileAfterSend(true);
         }
+
+        return asset($stylizedImagePath);
     }
 
     /**
@@ -80,7 +79,7 @@ class MediaController extends Controller
      */
     public function show(Media $media)
     {
-        return view('media.show', compress('media'));        
+        return view('media.show', ['media' => $media, 'userId' => Auth::id()]);        
     }
 
     /**
@@ -115,5 +114,13 @@ class MediaController extends Controller
     public function destroy(Media $media)
     {
         //
+    }
+
+    public function photosByUserId($user_id)
+    {
+        $photos = Auth::user()->media()->get();
+        //$media = Media::with['user_id' -> $user_id];
+        return view('media.photosByUserId', $photos);
+        //return view('media.photosByUserId', $media);
     }
 }
