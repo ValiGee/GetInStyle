@@ -80,7 +80,7 @@ class MediaController extends Controller
      */
     public function show(Media $media)
     {
-        return view('media.show', ['media' => $media->with('comments.replies'), 'userId' => Auth::id()]);        
+        return view('media.show', ['media' => $media->load('comments.replies'), 'userId' => Auth::id()]);        
     }
 
     /**
