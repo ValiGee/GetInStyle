@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Comment;
 use Illuminate\Http\Request;
 use App\Like;
+use App\Http\Requests\StoreCommentRequest;
 
 class CommentController extends Controller
 {
@@ -34,12 +35,20 @@ class CommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreCommentRequest $request)
     {
+        if ($request->parent_id && Comment::find($request->parent_id)->parent_id) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'You can not reply to replies!'
+            ]);
+        }
+
         $comment = Comment::create([
-            'user_id' => $request->user_id,
+            'user_id' => Auth::id(),
             'media_id' => $request->media_id,
-            'message' => $request->message
+            'message' => $request->message,
+            'parent_id' => $request->parent_id,
         ]);
 
         return response()->json([
