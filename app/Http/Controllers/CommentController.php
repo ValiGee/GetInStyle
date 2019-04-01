@@ -6,6 +6,7 @@ use App\Comment;
 use Illuminate\Http\Request;
 use App\Like;
 use App\Http\Requests\StoreCommentRequest;
+use Auth;
 
 class CommentController extends Controller
 {
