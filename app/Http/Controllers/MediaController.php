@@ -87,6 +87,7 @@ class MediaController extends Controller
         $media->load(['comments' => function ($query) {
             $query->withCount('likes');
         }, 'comments.replies']);
+        $media->likes_count = $media->likes()->count();
 
         $userId = Auth::id();
 
