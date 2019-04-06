@@ -31,28 +31,66 @@
                 @else
                     <ul class="media-list stack-media-on-mobile">
                         @foreach($media["comments"] as $comment)
-                            <li class="media">
-                                <div class="media-left">
-                                    <a href="#"><img src="{{ 'TODO' /* TODO: add avatar to user */ }}" class="img-circle img-sm" alt=""></a>
-                                </div>
-
-                                <div class="media-body">
-                                    <div class="media-heading">
-                                        <a href="#" class="text-semibold">{{ $comment->user->name }}</a>
-                                        <span class="comment-date media-annotation dotted" style="display: none">
-                                            {{ $comment->created_at }}
-                                        </span>
+                            <!-- Main comments -->
+                            @if(is_null($comment->parent_id))
+                                <li class="media">
+                                    <div class="media-left">
+                                        <a href="#"><img src="{{ 'TODO' /* TODO: add avatar to user */ }}" class="img-circle img-sm" alt=""></a>
                                     </div>
 
-                                    <p>{!! $comment->message /* parse the string as html */ !!}</p>
+                                    <div class="media-body">
+                                        <div class="media-heading">
+                                            <a href="#" class="text-semibold">{{ $comment->user->name }}</a>
+                                            <span class="comment-date media-annotation dotted" style="display: none">
+                                                {{ $comment->created_at }}
+                                            </span>
+                                        </div>
 
-                                    <ul class="list-inline list-inline-separate text-size-small">
-                                        <li>70 <a href="#"><i class="icon-arrow-up22 text-success"></i></a><a href="#"><i class="icon-arrow-down22 text-danger"></i></a></li>
-                                        <li><a href="#">Reply</a></li>
-                                        <li><a href="#">Edit</a></li>
-                                    </ul>
-                                </div>
-                            </li>
+                                        <p>{!! $comment->message /* parse the string as html */ !!}</p>
+
+                                        <div id="info-comment-id-{{ $comment->id }}"
+                                             data-route="{{ route('comments.like', $comment->id) }}"></div>
+                                        <ul class="list-inline list-inline-separate text-size-small">
+                                            <li><a href="#"><i class="icon-heart6 text-size-base text-pink position-left"
+                                                                  data-comment-id="{{ $comment->id }}"> {{ $comment->likes_count }}</i></a></li>
+                                            <li><a href="#" class="reply-a" data-comment-id="{{ $comment->id }}">Reply</a></li>
+                                            <li style="visibility: hidden"><a href="#" class="reply-discard-a" data-comment-id="{{ $comment->id }}">Discard</a></li>
+                                            <li style="visibility: hidden"><a href="#" class="reply-submit-a" data-comment-id="{{ $comment->id }}">Add reply</a></li>
+                                        </ul>
+
+                                        <div id="ck_placeholder_{{ $comment->id }}"></div>
+
+                                        <!-- Replies -->
+                                        @foreach($comment->replies as $reply)
+                                            <div class="media">
+                                                <div class="media-left">
+                                                    <a href="#"><img src="{{ 'TODO' /* TODO: add avatar to user */ }}" class="img-circle img-sm" alt=""></a>
+                                                </div>
+
+                                                <div class="media-body">
+                                                    <div class="media-heading">
+                                                        <a href="#" class="text-semibold">{{ $reply->user->name }}</a>
+                                                        <span class="comment-date media-annotation dotted" style="display: none">
+                                                            {{ $reply->created_at }}
+                                                        </span>
+                                                    </div>
+
+                                                    <p>{!! $reply->message /* parse the string as html */ !!}</p>
+
+                                                    <div id="info-comment-id-{{ $reply->id }}"
+                                                         data-route="{{ route('comments.like', $reply->id) }}"></div>
+                                                    <ul class="list-inline list-inline-separate text-size-small">
+                                                        <li><a href="#"><i class="icon-heart6 text-size-base text-pink position-left"
+                                                                              data-comment-id="{{ $reply->id }}"> {{ $reply->likes_count }} </i></a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                        <!-- /Replies -->
+                                    </div>
+                                </li>
+                            @endif
+                            <!-- /Main comments -->
                         @endforeach
                     </ul>
                 @endif
@@ -104,21 +142,141 @@
             var userId = @php if(Auth::guest()) echo -1; else echo $userId; @endphp;
 
             if (userId !== -1) {
+                CKEDITOR.editorConfig = function( config ) {
+                    //config.extraPlugins = 'emojione';
+                };
+
                 CKEDITOR.replace('ck_placeholder', {
                     height: '200px',
                     removeButtons: 'Subscript,Superscript',
                     toolbarGroups: [
                         { name: 'styles' },
-                        { name: 'editing',     groups: [ 'find', 'selection' ] },
-                        { name: 'basicstyles', groups: [ 'basicstyles' ] },
-                        { name: 'paragraph',   groups: [ 'list', 'blocks', 'align' ] },
                         { name: 'links' },
                         { name: 'insert' },
                         { name: 'colors' },
                         { name: 'tools' },
-                        { name: 'others' },
-                        { name: 'document',    groups: [ 'mode', 'document', 'doctools' ] }
+                        { name: 'others' }
                     ]
+                });
+
+                //add like functionality
+                //like/unlike
+                $('.icon-heart6.text-size-base.text-pink.position-left').on('click', function(e) {
+                    e.preventDefault();
+
+                    let commentId = $(this).data('comment-id');
+                    let route = $('#info-comment-id-' + commentId).data('route');
+
+                    let _data = {};
+
+                    let csrf = $('meta[name="csrf-token"]').attr('content');
+
+                    console.log(_data);
+
+                    $.ajax({
+                        type: "POST",
+                        url: route,
+                        headers: {
+                            'X-CSRF-TOKEN': csrf
+                        },
+                        data: _data,
+                        success: function(resp) {
+                            console.log(resp);
+                            location.reload(); //reincarcam pagina
+                        },
+                        error: function(err) {
+                            console.log(err);
+                        }
+                    });
+                });
+
+                //add reply functionality
+                //when clicking on 'Reply'
+                $('.reply-a').on('click', function(e) {
+                    e.preventDefault();
+
+                    let commentId = $(this).data('comment-id');
+
+                    //add ckeditor instance
+                    CKEDITOR.replace('ck_placeholder_' + commentId, {
+                        height: '120px',
+                        removeButtons: 'Subscript,Superscript',
+                        toolbarGroups: [
+                            { name: 'styles' },
+                            { name: 'editing',     groups: [ 'find', 'selection' ] },
+                            { name: 'basicstyles', groups: [ 'basicstyles' ] },
+                            { name: 'paragraph',   groups: [ 'list', 'blocks', 'align' ] },
+                            { name: 'links' },
+                            { name: 'insert' },
+                            { name: 'colors' },
+                            { name: 'tools' },
+                            { name: 'document',    groups: [ 'mode', 'document', 'doctools' ] }
+                        ]
+                    });
+
+                    //make discard and submit li tags visible
+                    let reply_a = this.parentNode.nextElementSibling.children[0];
+                    let submit_a = reply_a.parentNode.nextElementSibling.children[0];
+
+                    reply_a.parentNode.style.visibility = "visible";
+                    submit_a.parentNode.style.visibility = "visible";
+                });
+                //when clicking on 'Discard'
+                $('.reply-discard-a').on('click', function(e) {
+                    e.preventDefault();
+
+                    let commentId = $(this).data('comment-id');
+
+                    //remove ckeditor instance
+                    let ck_instance_name = 'ck_placeholder_' + commentId;
+                    if(CKEDITOR.instances[ck_instance_name])
+                        CKEDITOR.instances[ck_instance_name].destroy();
+
+                    //make discard and submit li tags hidden
+                    let reply_a = this;
+                    let submit_a = this.parentNode.nextElementSibling.children[0];
+
+                    reply_a.parentNode.style.visibility = "hidden";
+                    submit_a.parentNode.style.visibility = "hidden";
+
+                    //remove remainder text
+                    $('#' + ck_instance_name).text('');
+                });
+                //when clicking on 'Add Reply'
+                $('.reply-submit-a').on('click', function(e) {
+                    e.preventDefault();
+
+                    let commentId = $(this).data('comment-id');
+                    let ck_instance_name = 'ck_placeholder_' + commentId;
+                    let _message = CKEDITOR.instances[ck_instance_name].getData();
+
+                    let mediaId = {{ $media->id }};
+                    let route = "{{ route('comments.store') }}";
+
+                    let _data = {
+                        user_id: userId,
+                        media_id: mediaId,
+                        message: _message,
+                        parent_id: commentId
+                    };
+
+                    let csrf = $('meta[name="csrf-token"]').attr('content');
+
+                    $.ajax({
+                        type: "POST",
+                        url: route,
+                        headers: {
+                            'X-CSRF-TOKEN': csrf
+                        },
+                        data: _data,
+                        success: function(resp) {
+                            console.log(resp);
+                            location.reload(); //reincarcam pagina
+                        },
+                        error: function(err) {
+                            console.log(err);
+                        }
+                    });
                 });
 
                 // add comment submit
