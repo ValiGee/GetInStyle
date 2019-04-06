@@ -21,9 +21,13 @@ class MediaController extends Controller
      */
     public function index()
     {
-        $media = Media::with(['user'])->withCount('likes')->get();
+        $media = Media::with(['user'])->withCount('likes')->withCount('comments')->get();
 
-        return view('media.index', compact('media'));
+        if (request()->wantsJson()) {
+            return response()->json($media);
+        } else {
+            return view('media.index', compact('media'));
+        }
     }
 
     /**
@@ -69,7 +73,7 @@ class MediaController extends Controller
             Storage::disk('public')->delete(substr($imagePath, strpos($imagePath, 'media_upload')));
         }
 
-        return asset($stylizedImagePath);
+        return response()->json(asset($stylizedImagePath));
     }
 
     /**
@@ -80,7 +84,14 @@ class MediaController extends Controller
      */
     public function show(Media $media)
     {
-        return view('media.show', ['media' => $media->load('comments.replies'), 'userId' => Auth::id()]);        
+        $media->load('comments.replies');
+        $userId = Auth::id();
+
+        if (request()->wantsJson()) {
+            return response()->json(['media' => $media]);
+        } else {
+            return view('media.show', compact('media', 'userId'));        
+        }
     }
 
     /**
@@ -91,7 +102,7 @@ class MediaController extends Controller
      */
     public function edit(Media $media)
     {
-        return view('media.edit', compress('media'));        
+        return view('media.edit', compact('media'));        
     }
 
     /**
