@@ -84,7 +84,11 @@ class MediaController extends Controller
      */
     public function show(Media $media)
     {
-        $media->load('comments.replies');
+        $media->load(['comments' => function ($query) {
+            $query->withCount('likes');
+        }, 'comments.replies']);
+        $media->likes_count = $media->likes()->count();
+
         $userId = Auth::id();
 
         if (request()->wantsJson()) {
