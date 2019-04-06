@@ -40,14 +40,12 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="5dp"
-                android:autofillHints="@string/logEmailAutoFill"
                 android:background="@color/colorPrimaryLight"
                 android:drawableLeft="@drawable/ic_email_black_24dp"
                 android:ems="10"
                 android:fontFamily="@font/lato_black"
                 android:inputType="textEmailAddress"
                 android:padding="10dp"
-                android:text="Email"
                 android:textAlignment="center"
                 android:textColor="@color/colorPrimaryDark" />
 
@@ -64,13 +62,13 @@
                 android:fontFamily="@font/lato_bold"
                 android:inputType="textPassword"
                 android:padding="10dp"
-                android:text="Password"
                 android:textAlignment="center"
                 android:drawableLeft="@drawable/ic_vpn_key_black_24dp"
                 android:textColor="@color/colorPrimaryDark" />
 
             <Button
                 android:id="@+id/logInButton"
+                android:onClick="logInButtonOnClick"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
