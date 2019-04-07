@@ -5,13 +5,22 @@
     <string name="logInButtonTitle">Log In</string>
     <string name="logInWithFacebookButtonTitle">Log In with Facebook</string>
     <string name="signUpMessage">Don\'t have an account?\nNo prob...</string>
-    <string name="signUpButtonTitle" >Sign Up</string>
+    <string name="signUpButtonTitle">Sign Up</string>
     <string name="passwordAutoFill">Password</string>
-    <string name="signUpTitle" >SIGN UP</string>
+    <string name="signUpTitle">SIGN UP</string>
     <string name="signUpSubtitle">It\'s free and always will be</string>
     <string name="firstNameAutoFill">First Name</string>
     <string name="lastNameAutoFill">Last Name</string>
     <string name="createAccountButtonTitle">Create Account</string>
     <string name="birthdayText">Birthday</string>
     <string name="dayPrompt">Day</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="username">Username</string>
+    <string name="add_picture">Add image from your phone</string>
+    <string name="load_a_new_style">LOAD A NEW STYLE</string>
+    <string name="choose_a_photo_from_your_phone">Choose a photo from your phone</string>
+    <string name="chooses_photo_for_create_style">Chooses photo for create style</string>
+    <string name="create_style">Create style</string>
+    <string name="apply_style">Apply Style</string>
 </resources>

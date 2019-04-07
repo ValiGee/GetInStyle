@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         email = (EditText) findViewById(R.id.email);
         password = (EditText) findViewById(R.id.password);
         email.setHint("Email");
-        password.setHint("password");
+        password.setHint("Password");
 
     }
 
