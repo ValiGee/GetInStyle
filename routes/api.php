@@ -25,7 +25,12 @@ Route::get('media/{media}', [
 
 Route::post('media', [
     'uses' => 'MediaController@store',
-    'as' => 'media.store'
+    'as' => 'api.media.store'
+]);
+
+Route::post('register', [
+    'uses' => 'Auth\RegisterController@register',
+    'as' => 'api.register',
 ]);
 
 Route::group(['middleware' => ['auth:api']], function () {
