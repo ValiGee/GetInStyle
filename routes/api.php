@@ -1,7 +1,9 @@
 <?php
 
-use Illuminate\Http\Request;
 
+namespace App\Http\Controllers;
+
+use Route;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -33,6 +35,8 @@ Route::post('register', [
     'as' => 'api.register',
 ]);
 
+Route::post('register', ['uses' => 'Auth\RegisterController@register']);
+
 Route::group(['middleware' => ['auth:api']], function () {
     Route::delete('media/{media}', [
         'uses' => 'MediaController@delete',
@@ -54,3 +58,6 @@ Route::group(['middleware' => ['auth:api']], function () {
         'as' => 'api.comments.like',
     ]);
 });
+
+
+

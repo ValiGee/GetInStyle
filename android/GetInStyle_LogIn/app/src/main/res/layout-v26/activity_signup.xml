@@ -48,7 +48,7 @@
                 android:textSize="15sp" />
 
             <EditText
-                android:id="@+id/fname"
+                android:id="@+id/name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
@@ -60,9 +60,9 @@
                 android:drawableStart="@drawable/ic_account_circle_black_24dp"
                 android:ems="10"
                 android:fontFamily="@font/lato_black"
+                android:hint="@string/username"
                 android:inputType="textPersonName"
                 android:padding="10dp"
-                android:hint="@string/username"
                 android:textAlignment="center"
                 android:textColor="@color/colorPrimaryDark" />
 
@@ -105,7 +105,7 @@
                 tools:ignore="Autofill" />
 
             <EditText
-                android:id="@+id/ConfirmPassword"
+                android:id="@+id/confirm_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
@@ -116,40 +116,68 @@
                 android:drawableStart="@drawable/ic_vpn_key_black_24dp"
                 android:ems="10"
                 android:fontFamily="@font/lato_bold"
+                android:hint="@string/password"
                 android:inputType="textPassword"
                 android:padding="10dp"
-                android:hint="@string/password"
                 android:textAlignment="center"
                 android:textColor="@color/colorPrimaryDark"
                 tools:ignore="Autofill" />
 
-            <Button
-            android:id="@+id/createAccountButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="25dp"
-            android:background="@color/colorAccent"
-            android:fontFamily="@font/lato_bold"
-            android:padding="10dp"
-            android:text="@string/createAccountButtonTitle"
-            android:textAlignment="center"
-            android:textColor="@color/colorPrimaryLight" />
-
             <!--TEST-->
             <Button
-                android:id="@+id/test"
-                android:onClick="testButtonOnClick"
+                android:id="@+id/addImage2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/colorAccent"
+                android:fontFamily="@font/lato_bold"
+                android:onClick="selectImage"
+                android:padding="10dp"
+                android:text="Select avatar"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimaryLight" />
+
+            <ImageView
+                android:id="@+id/styleimageview"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:contentDescription="@string/chooses_photo_for_create_style"
+                android:src="@mipmap/ic_launcher" />
+
+            <Button
+                android:id="@+id/createAccountButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="25dp"
-                android:background="@color/colorAccent"
+                android:background="@android:color/holo_green_dark"
                 android:fontFamily="@font/lato_bold"
+                android:onClick="createAccountOnClick"
+                android:padding="10dp"
+                android:text="@string/createAccountButtonTitle"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimaryLight" />
+
+            <Button
+                android:id="@+id/test"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="25dp"
+                android:background="@color/design_default_color_primary_dark"
+                android:fontFamily="@font/lato_bold"
+                android:onClick="testButtonOnClick"
                 android:padding="10dp"
                 android:text="Go to Upload Page"
                 android:textAlignment="center"
