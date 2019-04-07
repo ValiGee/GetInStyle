@@ -105,9 +105,20 @@ class CommentController extends Controller
 
     public function toggleLike(Comment $comment)
     {
-        $like = new Like(['created_at' => now(), 'updated_at' => now(), 'user_id' => Auth::id()]);
-        $comment->likes()->toggle($like);
+        $userLike = $comment->likes()->where('user_id', Auth::id())->first();
 
-        return true;
+        if ($userLike) {
+            // Unlike
+            $userLike->delete();
+        } else {
+            // Like
+            $like = new Like(['created_at' => now(), 'updated_at' => now(), 'user_id' => Auth::id()]);
+            $comment->likes()->save($like);
+        }
+
+        return reponse()->json([
+            'status' => 'success',
+            'message' => '',
+        ]);
     }
 }

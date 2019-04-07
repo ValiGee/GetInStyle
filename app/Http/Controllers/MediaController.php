@@ -21,7 +21,11 @@ class MediaController extends Controller
      */
     public function index()
     {
-        $media = Media::with(['user'])->withCount('likes')->withCount('comments')->get();
+        $media = Media::with(['user'])->withCount('likes')->withCount('comments')->withCount(['likes as liked' => function ($query) {
+            $query->where('user_id', Auth::check() ? Auth::id() : 0);
+        }]);
+
+        $media = $media->get();
 
         if (request()->wantsJson()) {
             return response()->json($media);
@@ -86,8 +90,17 @@ class MediaController extends Controller
     {
         $media->load(['comments' => function ($query) {
             $query->withCount('likes');
-        }, 'comments.replies']);
+            $query->withCount(['likes as liked' => function ($q) {
+                $q->where('user_id', Auth::id());
+            }]);
+        }, 'comments.replies' => function ($query) {
+            $query->withCount('likes');
+            $query->withCount(['likes as liked' => function ($q) {
+                $q->where('user_id', Auth::id());
+            }]);
+        }]);
         $media->likes_count = $media->likes()->count();
+        $media->liked = $media->likes()->where('user_id', Auth::check() ? Auth::id() : 0)->count();
 
         $userId = Auth::id();
 
@@ -142,9 +155,20 @@ class MediaController extends Controller
 
     public function toggleLike(Media $media)
     {
-        $like = new Like(['created_at' => now(), 'updated_at' => now(), 'user_id' => Auth::id()]);
-        $media->likes()->toggle($like);
+        $userLike = $media->likes()->where('user_id', Auth::id())->first();
 
-        return true;
+        if ($userLike) {
+            // Unlike
+            $userLike->delete();
+        } else {
+            // Like
+            $like = new Like(['created_at' => now(), 'updated_at' => now(), 'user_id' => Auth::id()]);
+            $media->likes()->save($like);
+        }
+
+        return reponse()->json([
+            'status' => 'success',
+            'message' => '',
+        ]);
     }
 }
