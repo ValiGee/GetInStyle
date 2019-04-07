@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark"
-    tools:context=".LoadPictureForStyle">
+    tools:context=".LoadPictureForApplyStyle">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -27,7 +27,7 @@
                 android:paddingTop="30dp"
                 android:paddingRight="10dp"
                 android:paddingBottom="10dp"
-                android:text="@string/load_a_new_style"
+                android:text="@string/apply_style"
                 android:textAlignment="center"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/colorPrimaryLight"
@@ -48,7 +48,7 @@
                 android:textSize="15sp" />
 
             <ImageView
-                android:id="@+id/styleImageView"
+                android:id="@+id/pictureImageView"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:src="@mipmap/ic_launcher"
@@ -57,6 +57,21 @@
                 android:layout_marginTop="0dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="10dp"/>
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/horizontalScrollView">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/styles_container"
+                    android:orientation="horizontal">
+
+                </LinearLayout>
+
+            </HorizontalScrollView>
 
             <Button
                 android:id="@+id/addImage"
@@ -75,7 +90,7 @@
                 android:textColor="@color/colorPrimaryLight" />
 
             <Button
-                android:id="@+id/createStyle"
+                android:id="@+id/applyStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
@@ -84,14 +99,13 @@
                 android:layout_marginBottom="25dp"
                 android:background="@android:color/holo_green_dark"
                 android:fontFamily="@font/lato_bold"
-                android:onClick="createStyle"
+                android:onClick="applyStyle"
                 android:padding="10dp"
-                android:text="@string/create_style"
+                android:text="@string/apply_style"
                 android:textAlignment="center"
                 android:textColor="@color/colorPrimaryLight" />
 
         </LinearLayout>
 
     </ScrollView>
-
 </android.support.constraint.ConstraintLayout>

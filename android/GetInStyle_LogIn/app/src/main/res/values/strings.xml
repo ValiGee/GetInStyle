@@ -22,4 +22,5 @@
     <string name="choose_a_photo_from_your_phone">Choose a photo from your phone</string>
     <string name="chooses_photo_for_create_style">Chooses photo for create style</string>
     <string name="create_style">Create style</string>
+    <string name="apply_style">Apply Style</string>
 </resources>

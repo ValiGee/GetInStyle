@@ -8,7 +8,7 @@ import android.view.View;
 public class SignUpActivity extends AppCompatActivity {
 
     public void testButtonOnClick(View view){
-        startActivity(new Intent(SignUpActivity.this, LoadPictureForStyle.class));
+        startActivity(new Intent(SignUpActivity.this, LoadPictureForApplyStyle.class));
     }
 
     @Override
