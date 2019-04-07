@@ -121,6 +121,10 @@
     <script type="text/javascript" src="{{ URL::asset('limitless/assets/js/core/libraries/jquery_ui/touch.min.js') }}"></script>
 
     <script type="text/javascript">
+        window.onload = function(e) {
+            userId = @php if(Auth::guest()) echo -1; else echo $userId; @endphp;
+        };
+
         function fixAnchorTagClick(e) { //Fara event listener nu se deschidea link-ul
             window.location.href = e.currentTarget.href;
         }
@@ -128,6 +132,9 @@
         function updateLike(e) {
             e.preventDefault();
 
+            if(userId == -1)
+                return;
+            
             let _this = e.currentTarget;
 
             // Change like in view
