@@ -30,7 +30,8 @@ class MediaController extends Controller
         if (request()->wantsJson()) {
             return response()->json($media);
         } else {
-            return view('media.index', compact('media'));
+            $userId = Auth::id();
+            return view('media.index', compact('media', 'userId'));
         }
     }
 
@@ -166,7 +167,7 @@ class MediaController extends Controller
             $media->likes()->save($like);
         }
 
-        return reponse()->json([
+        return response()->json([
             'status' => 'success',
             'message' => '',
         ]);

@@ -4,18 +4,27 @@
     <!-- Display photos -->
     <div id="photos-container">
         @foreach($media as $_media)
-            <div class="panel panel-flat animation" data-animation="bounceInLeft" style="visibility: visible;">
+            <div class="panel panel-flat">
                 <div class="panel-body">
                     <a href="{{ route('media.show', $_media->id) }}" onclick="fixAnchorTagClick(event)"><img src={{ URL::asset($_media["stylized_path"]) }}></a>
                 </div>
+                <div id="info-media-id-{{ $_media->id }}"
+                     data-route="{{ route('media.like', $_media->id) }}"></div>
                 <div class="panel-footer panel-footer-condensed">
                     <div class="heading-elements not-collapsible">
                         <ul class="list-inline list-inline-separate heading-text text-muted">
                             <li>
-                                <a href="#" class="text-muted"><i class="icon-heart6 text-size-base text-pink position-left"></i>14</a>
+                                <a href="#" class="text-muted"><i @if($_media->liked)
+                                                                  class="icon-heart5 text-size-base text-pink position-left like-button"
+                                                                  @else
+                                                                  class="icon-heart6 text-size-base text-pink position-left like-button"
+                                                                  @endif
+                                                                  onclick="updateLike(event)"
+                                                                  data-media-id="{{ $_media->id }}"
+                                                                  data-liked="{{ $_media->liked }}"> {{ $_media->likes_count }}</i></a>
                             </li>
                         </ul>
-                        <a href="#" class="heading-text pull-right"><i class="icon-comments position-right"></i> 5</a>
+                        <a href="{{ route('media.show', $_media->id) }}" onclick="fixAnchorTagClick(event)" class="heading-text pull-right"><i class="icon-comments position-right"></i> {{ sizeof($_media->comments) }}</a>
                     </div>
                 </div>
             </div>
@@ -91,7 +100,7 @@
     }
 
     #photos-container .panel:hover {
-        opacity: 0.5
+        opacity: 0.8;
     }
 
     #photos-container .panel .panel-body {
@@ -105,48 +114,65 @@
         padding: 0;
     }
     </style>
-
-    <!-- The following link + style are for the animations -->
-    <link href="{{ URL::asset('limitless/assets/css/extras/animate.min.css') }}" rel="stylesheet" type="text/css">
-    <style type="text/css">
-        #photos-container .panel.animation {
-            visibility: hidden; /* set to hidden until all is loaded, so we have smooth animation */
-        }
-    </style>
 @endpush
 
 @push('js')
-    <script type="text/javascript" src="{{ URL::asset('limitless/assets/js/pages/animations_css3.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('limitless/assets/js/core/libraries/jquery_ui/interactions.min.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('limitless/assets/js/core/libraries/jquery_ui/touch.min.js') }}"></script>
 
     <script type="text/javascript">
+        window.onload = function(e) {
+            userId = @php if(Auth::guest()) echo -1; else echo $userId; @endphp;
+        };
+
         function fixAnchorTagClick(e) { //Fara event listener nu se deschidea link-ul
             window.location.href = e.currentTarget.href;
         }
 
-        function getRandomSize(min, max) {
-            return Math.round(Math.random() * (max - min) + min);
-        }
+        function updateLike(e) {
+            e.preventDefault();
 
-        function imgLoaded(e) {
-            //make visible
-            let img = e; //am trimis imaginea ca parametru
-            if (e.target !== undefined) //s-a declansat evenimentul
-                img = e.target;
+            if(userId == -1)
+                return;
+            
+            let _this = e.currentTarget;
 
-            let divPanel = img.parentNode.parentNode;
-            divPanel.style.visibility = "visible";
+            // Change like in view
+            let liked = _this.dataset.liked;
+            let likes_count = parseInt(_this.innerText);
+            if(liked == 0) {
+                likes_count = likes_count + 1;
+            }
+            else {
+                likes_count = likes_count - 1;
+            }
+            _this.innerText = ' ' + likes_count;
+            _this.dataset.liked = 1 - liked;
+            _this.classList.toggle('icon-heart5');
+            _this.classList.toggle('icon-heart6');
 
-            let animationData = divPanel.dataset.animation;
-            //apply animation
-            $(divPanel).addClass("animated " + animationData).one("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend", function () {
-                $(this).removeClass("animated " + animationData);
+            // Make request
+            let mediaId = $(_this).data('media-id');
+            let route = $('#info-media-id-' + mediaId).data('route');
+
+            let _data = {};
+
+            let csrf = $('meta[name="csrf-token"]').attr('content');
+
+            $.ajax({
+                type: "POST",
+                url: route,
+                headers: {
+                    'X-CSRF-TOKEN': csrf
+                },
+                data: _data,
+                success: function(resp) {
+                    console.log(resp);
+                },
+                error: function(err) {
+                    console.log(err);
+                }
             });
-        }
-
-        window.onload = function(e) {
-
         }
     </script>
 @endpush
