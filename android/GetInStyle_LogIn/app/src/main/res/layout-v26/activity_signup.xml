@@ -124,7 +124,24 @@
                 tools:ignore="Autofill" />
 
             <Button
-                android:id="@+id/createAccountButton"
+            android:id="@+id/createAccountButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="25dp"
+            android:background="@color/colorAccent"
+            android:fontFamily="@font/lato_bold"
+            android:padding="10dp"
+            android:text="@string/createAccountButtonTitle"
+            android:textAlignment="center"
+            android:textColor="@color/colorPrimaryLight" />
+
+            <!--TEST-->
+            <Button
+                android:id="@+id/test"
+                android:onClick="testButtonOnClick"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
@@ -134,9 +151,10 @@
                 android:background="@color/colorAccent"
                 android:fontFamily="@font/lato_bold"
                 android:padding="10dp"
-                android:text="@string/createAccountButtonTitle"
+                android:text="Go to Upload Page"
                 android:textAlignment="center"
-                android:textColor="@color/colorPrimaryLight" />
+                android:textColor="@color/colorPrimaryLight"
+                tools:ignore="HardcodedText" />
 
         </LinearLayout>
 
