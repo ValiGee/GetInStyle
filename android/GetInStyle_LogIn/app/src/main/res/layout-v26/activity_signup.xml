@@ -5,18 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark"
-    tools:context=".MainActivity">
+    tools:context=".SignUpActivity">
 
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:ignore="ScrollViewCount">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
             android:orientation="vertical"
-            android:layout_margin="8dp">
+            tools:ignore="ScrollViewSize">
 
             <TextView
                 android:layout_width="match_parent"
@@ -25,30 +26,64 @@
                 android:paddingLeft="10dp"
                 android:paddingTop="30dp"
                 android:paddingRight="10dp"
-                android:paddingBottom="20dp"
-                android:text="@string/logInTitle"
+                android:paddingBottom="10dp"
+                android:text="@string/signUpTitle"
                 android:textAlignment="center"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/colorPrimaryLight"
                 android:textSize="30sp" />
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato_bold"
+                android:paddingLeft="10dp"
+                android:paddingTop="0dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="10dp"
+                android:text="@string/signUpSubtitle"
+                android:textAlignment="center"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/colorPrimaryLight"
+                android:textSize="15sp" />
+
             <EditText
-                android:id="@+id/email"
+                android:id="@+id/fname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="5dp"
+                android:autofillHints="@string/firstNameAutoFill"
                 android:background="@color/colorPrimaryLight"
                 android:drawableStart="@drawable/ic_account_circle_black_24dp"
                 android:ems="10"
                 android:fontFamily="@font/lato_black"
-                android:inputType="textMultiLine"
+                android:inputType="textPersonName"
                 android:padding="10dp"
+                android:hint="@string/username"
                 android:textAlignment="center"
-                android:textColor="@color/colorPrimaryDark"
-                tools:ignore="Autofill,LabelFor,TextFields,UnusedAttribute"/>
+                android:textColor="@color/colorPrimaryDark" />
+
+            <EditText
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="5dp"
+                android:autofillHints="@string/logEmailAutoFill"
+                android:background="@color/colorPrimaryLight"
+                android:drawableStart="@drawable/ic_email_black_24dp"
+                android:ems="10"
+                android:fontFamily="@font/lato_black"
+                android:inputType="textEmailAddress"
+                android:padding="10dp"
+                android:hint="@string/email"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimaryDark" />
 
             <EditText
                 android:id="@+id/password"
@@ -64,84 +99,47 @@
                 android:fontFamily="@font/lato_bold"
                 android:inputType="textPassword"
                 android:padding="10dp"
+                android:hint="@string/password"
                 android:textAlignment="center"
                 android:textColor="@color/colorPrimaryDark"
-                tools:ignore="Autofill,LabelFor" />
+                tools:ignore="Autofill" />
 
-            <Button
-                android:id="@+id/logInButton"
-                android:onClick="logInButtonOnClick"
+            <EditText
+                android:id="@+id/ConfirmPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
-                android:background="@color/colorAccent"
-                android:textColor="@color/colorPrimaryLight"
-                android:textAlignment="center"
+                android:background="@color/colorPrimaryLight"
+                android:drawableStart="@drawable/ic_vpn_key_black_24dp"
+                android:ems="10"
                 android:fontFamily="@font/lato_bold"
+                android:inputType="textPassword"
                 android:padding="10dp"
-                android:text="@string/logInButtonTitle" />
+                android:hint="@string/password"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimaryDark"
+                tools:ignore="Autofill" />
 
             <Button
-                android:id="@+id/LogInFacebookButon"
+                android:id="@+id/createAccountButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
-                android:background="@color/facebookColor"
-                android:textColor="@color/colorPrimaryLight"
-                android:textAlignment="center"
-                android:fontFamily="@font/lato_bold"
-                android:padding="10dp"
-                android:drawableStart="@drawable/ic_facebook"
-                android:text="@string/logInWithFacebookButtonTitle" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:orientation="vertical"
-            android:layout_margin="8dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/lato_bold"
-                android:paddingLeft="10dp"
-                android:paddingTop="10dp"
-                android:paddingRight="10dp"
-                android:paddingBottom="20dp"
-                android:text="@string/signUpMessage"
-                android:textAlignment="center"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/colorPrimaryLight"
-                android:textSize="15sp" />
-
-            <Button
-                android:id="@+id/SignUpButton"
-                android:onClick="signUpButtonOnClick"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="50dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="50dp"
                 android:layout_marginBottom="25dp"
                 android:background="@color/colorAccent"
-                android:fontFamily="@font/lato_black"
-                android:textSize="15sp"
-                android:padding="5dp"
-                android:text="@string/signUpButtonTitle"
+                android:fontFamily="@font/lato_bold"
+                android:padding="10dp"
+                android:text="@string/createAccountButtonTitle"
                 android:textAlignment="center"
                 android:textColor="@color/colorPrimaryLight" />
 
         </LinearLayout>
 
-    </RelativeLayout>
+    </ScrollView>
 
 </android.support.constraint.ConstraintLayout>

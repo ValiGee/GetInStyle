@@ -14,4 +14,7 @@
     <string name="createAccountButtonTitle">Create Account</string>
     <string name="birthdayText">Birthday</string>
     <string name="dayPrompt">Day</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="username">Username</string>
 </resources>
