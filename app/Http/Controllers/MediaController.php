@@ -166,7 +166,7 @@ class MediaController extends Controller
             $media->likes()->save($like);
         }
 
-        return reponse()->json([
+        return response()->json([
             'status' => 'success',
             'message' => '',
         ]);

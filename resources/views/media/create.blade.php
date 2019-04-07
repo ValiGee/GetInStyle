@@ -67,8 +67,19 @@
                     </div>
                 </div>
             </form>
+            <div id="third-stage-container" class="row">
+                <div id="stylized-image-container" class="col-md-12">
+                    <img id="stylized-image" src="" />
+                </div>
+            </div>
+            <div id="fourth-stage-container" class="row center-container">
+                @if(Auth::guest())
+                    <h3 align="center">Like it? Login or Sign Up to save your image.</h3>
+                @else
+                    <button id="postImageBtn" class="btn btn-success ">Post image</button>
+                @endif
+            </div>
         </div>
-        <img id="schimbaAici"/>
     </div>
 @endsection
 
@@ -189,6 +200,25 @@
         .remove-image:active {
             border: 0;
             transition: all .2s ease;
+        }
+
+        #third-stage-container, #fourth-stage-container {
+            display: none; /* will be set to 'block' */
+        }
+
+        #stylized-image-container {
+            margin-top: 20px;
+            position: relative;
+        }
+
+        #stylized-image {
+            display: block;
+            margin: 0 auto;
+            max-width: 800px;
+        }
+
+        #postImageBtn {
+            margin-top: 20px;
         }
     </style>
 
@@ -320,6 +350,9 @@
     <script type = "text/javascript">
         // Create the carousel.
         $(function() {
+            //Variables
+            var stylizedImageUrl = "";
+
             $('.kc-wrap').KillerCarousel({
                 // Default natural width of carousel.
                 width: 800,
@@ -365,12 +398,48 @@
                     processData: false,
                     contentType: false,
                     success:function(response, status, xhr){
-                        $('#schimbaAici').attr('src', response);
+                        stylizedImageUrl = response;
+                        console.log(response);
+                        $('#stylized-image').attr('src', response);
+                        $('#third-stage-container').css('display', 'block');
+                        $('#fourth-stage-container').css('display', 'block');
+                        $('html, body').animate({
+                            scrollTop: $('#postImageBtn').offset().top
+                        }, 800);
                         $('#loadingIcon').toggleClass('loading'); //deactivate the loading screen
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown) {
                         alert("Status: " + textStatus); alert("Error: " + errorThrown);
                         $('#loadingIcon').toggleClass('loading'); //deactivate the loading screen
+                    }
+                });
+            });
+
+            $('#postImageBtn').on('click', function(e) {
+                let route = "{{ route('media.store') }}";
+
+                let _data = {
+                    user_id: userId,
+                    media_id: mediaId,
+                    message: _message,
+                    parent_id: commentId
+                };
+
+                let csrf = $('meta[name="csrf-token"]').attr('content');
+
+                $.ajax({
+                    type: "POST",
+                    url: route,
+                    headers: {
+                        'X-CSRF-TOKEN': csrf
+                    },
+                    data: _data,
+                    success: function(resp) {
+                        console.log(resp);
+                        location.reload(); //reincarcam pagina
+                    },
+                    error: function(err) {
+                        console.log(err);
                     }
                 });
             });
@@ -382,7 +451,7 @@
 
             //2. Scroll to the photo upload stage for nice effects
             $('html, body').animate({
-                scrollTop: $('#second-stage-container').offset().top
+                scrollTop: $('#submitFormButton').offset().top
             }, 800);
 
             //3. Set the value of the style id in the hidden input

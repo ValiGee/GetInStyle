@@ -116,7 +116,7 @@ class CommentController extends Controller
             $comment->likes()->save($like);
         }
 
-        return reponse()->json([
+        return response()->json([
             'status' => 'success',
             'message' => '',
         ]);

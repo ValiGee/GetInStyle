@@ -35,7 +35,7 @@
                             @if(is_null($comment->parent_id))
                                 <li class="media">
                                     <div class="media-left">
-                                        <a href="#"><img src="{{ 'TODO' /* TODO: add avatar to user */ }}" class="img-circle img-sm" alt=""></a>
+                                        <a href="#"><img src="{{ url($comment->user->avatar) }}" class="img-circle img-sm" alt=""></a>
                                     </div>
 
                                     <div class="media-body">
@@ -51,8 +51,13 @@
                                         <div id="info-comment-id-{{ $comment->id }}"
                                              data-route="{{ route('comments.like', $comment->id) }}"></div>
                                         <ul class="list-inline list-inline-separate text-size-small">
-                                            <li><a href="#"><i class="icon-heart6 text-size-base text-pink position-left"
-                                                                  data-comment-id="{{ $comment->id }}"> {{ $comment->likes_count }}</i></a></li>
+                                            <li><a href="#"><i @if($comment->liked)
+                                                                  class="icon-heart5 text-size-base text-pink position-left like-button"
+                                                               @else
+                                                                  class="icon-heart6 text-size-base text-pink position-left like-button"
+                                                               @endif
+                                                                  data-comment-id="{{ $comment->id }}"
+                                                                  data-liked="{{ $comment->liked }}"> {{ $comment->likes_count }}</i></a></li>
                                             <li><a href="#" class="reply-a" data-comment-id="{{ $comment->id }}">Reply</a></li>
                                             <li style="visibility: hidden"><a href="#" class="reply-discard-a" data-comment-id="{{ $comment->id }}">Discard</a></li>
                                             <li style="visibility: hidden"><a href="#" class="reply-submit-a" data-comment-id="{{ $comment->id }}">Add reply</a></li>
@@ -64,7 +69,7 @@
                                         @foreach($comment->replies as $reply)
                                             <div class="media">
                                                 <div class="media-left">
-                                                    <a href="#"><img src="{{ 'TODO' /* TODO: add avatar to user */ }}" class="img-circle img-sm" alt=""></a>
+                                                    <a href="#"><img src="{{ url($comment->user->avatar) }}" class="img-circle img-sm" alt=""></a>
                                                 </div>
 
                                                 <div class="media-body">
@@ -80,8 +85,13 @@
                                                     <div id="info-comment-id-{{ $reply->id }}"
                                                          data-route="{{ route('comments.like', $reply->id) }}"></div>
                                                     <ul class="list-inline list-inline-separate text-size-small">
-                                                        <li><a href="#"><i class="icon-heart6 text-size-base text-pink position-left"
-                                                                              data-comment-id="{{ $reply->id }}"> {{ $reply->likes_count }} </i></a></li>
+                                                        <li><a href="#"><i @if($reply->liked)
+                                                                           class="icon-heart5 text-size-base text-pink position-left like-button"
+                                                                           @else
+                                                                           class="icon-heart6 text-size-base text-pink position-left like-button"
+                                                                           @endif
+                                                                           data-comment-id="{{ $reply->id }}"
+                                                                           data-liked="{{ $reply->liked }}"> {{ $reply->likes_count }} </i></a></li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -161,17 +171,30 @@
 
                 //add like functionality
                 //like/unlike
-                $('.icon-heart6.text-size-base.text-pink.position-left').on('click', function(e) {
+                $('.text-size-base.text-pink.position-left').on('click', function(e) {
                     e.preventDefault();
 
+                    // Change like in view
+                    let liked = this.dataset.liked;
+                    let likes_count = parseInt(this.innerText);
+                    if(liked == 0) {
+                        likes_count = likes_count + 1;
+                    }
+                    else {
+                        likes_count = likes_count - 1;
+                    }
+                    this.innerText = ' ' + likes_count;
+                    this.dataset.liked = 1 - liked;
+                    this.classList.toggle('icon-heart5');
+                    this.classList.toggle('icon-heart6');
+
+                    // Make request
                     let commentId = $(this).data('comment-id');
                     let route = $('#info-comment-id-' + commentId).data('route');
 
                     let _data = {};
 
                     let csrf = $('meta[name="csrf-token"]').attr('content');
-
-                    console.log(_data);
 
                     $.ajax({
                         type: "POST",
@@ -182,7 +205,6 @@
                         data: _data,
                         success: function(resp) {
                             console.log(resp);
-                            location.reload(); //reincarcam pagina
                         },
                         error: function(err) {
                             console.log(err);
