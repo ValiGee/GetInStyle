@@ -68,8 +68,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         email = (EditText) findViewById(R.id.email);
         password = (EditText) findViewById(R.id.password);
-        email.setHint("Email");
-        password.setHint("Password");
 
     }
 

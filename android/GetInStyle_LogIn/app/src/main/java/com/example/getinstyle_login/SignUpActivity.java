@@ -1,38 +1,32 @@
 package com.example.getinstyle_login;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.ArrayAdapter;
+import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.Toast;
-
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -60,6 +54,21 @@ public class SignUpActivity extends AppCompatActivity {
         pickFromGallery();
     }
 
+    public static String getRealPathFromUri(Context context, Uri contentUri) {
+        Cursor cursor = null;
+        try {
+            String[] proj = { MediaStore.Images.Media.DATA };
+            cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+
     private void pickFromGallery(){
         //Create an Intent with action as ACTION_PICK
         Intent intent=new Intent(Intent.ACTION_PICK);
@@ -72,30 +81,15 @@ public class SignUpActivity extends AppCompatActivity {
         startActivityForResult(intent,GALLERY_REQUEST_CODE);
     }
 
-    private String getPostDataString(HashMap<String, String> params) throws UnsupportedEncodingException {
-        StringBuilder result = new StringBuilder();
-        boolean first = true;
-        for(Map.Entry<String, String> entry : params.entrySet()){
-            if (first)
-                first = false;
-            else
-                result.append("&");
-
-            result.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
-            result.append("=");
-            result.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
-        }
-
-        return result.toString();
-    }
-
     String site_ul = "http://192.168.0.112:8000";
+    String avatar = "";
+    MediaType MEDIA_TYPE;
 
     public void createAccountOnClick(View view)
     {
         if(password.getText().toString().equals(confirm_password.getText().toString())) {
             String site = site_ul + "/api/register";
-            String current_action = "Login";
+            String current_action = "Register";
             String[] primele = new String[2];
             primele[0] = site;
             primele[1] = current_action;
@@ -119,93 +113,91 @@ public class SignUpActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        Log.e("ceva","A dat cineva click");
         // Result code is RESULT_OK only if the user selects an Image
         if (resultCode == Activity.RESULT_OK)
             switch (requestCode){
                 case GALLERY_REQUEST_CODE:
                     //data.getData returns the content URI for the selected Image
                     Uri selectedImage = data.getData();
-                    Log.e("ceva", selectedImage.toString());
+                    Log.e("uri_imagine", selectedImage.toString());
                     imageView.setImageURI(selectedImage);
                     imageView.setVisibility(View.VISIBLE);
-                    //button.setText("Change image");
-                    //buttonCreate.setVisibility((View.VISIBLE));
-                    //setStylesView();
+                    avatar = getRealPathFromUri(getApplicationContext(), selectedImage);
+                    MEDIA_TYPE = MediaType.parse(getMimeType(selectedImage));
                     break;
             }
     }
 
+    public String getMimeType(Uri uri) {
+        String mimeType = null;
+        if (uri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
+            ContentResolver cr = getApplicationContext().getContentResolver();
+            mimeType = cr.getType(uri);
+        } else {
+            String fileExtension = MimeTypeMap.getFileExtensionFromUrl(uri
+                    .toString());
+            mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
+                    fileExtension.toLowerCase());
+        }
+        return mimeType;
+    }
 
     public class ATask extends AsyncTask<String[], Void, String> {
 
-        String ceva = "";
         @Override
         protected String doInBackground(String[]... urls) {
 
-            try {
                 String site = urls[0][0];
                 Integer cate = Integer.parseInt(urls[1][0]);
-                HashMap <String, String> hash = new HashMap<String, String>();
+                MultipartBody.Builder builder = new MultipartBody.Builder();
+
                 for(int i = 1; i <= cate; i += 2)
                 {
                     String a = urls[1][i];
                     String b = urls[1][i + 1];
-                    Log.e("cineva", a);
-                    Log.e("altcineva", b);
-                    hash.put(a, b);
+                    Log.e("cheie", a);
+                    Log.e("valoare", b);
+                    builder.addFormDataPart(a, b);
                 }
-                Log.e("rasp", site);
-                URL obj = new URL(site);
-                try {
-                    Log.e("rasp", obj.toString());
-                    HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-                    con.setRequestMethod("POST");
-                    con.setRequestProperty("Content-Type",
-                            "application/x-www-form-urlencoded");
-                    con.setRequestProperty("Accept",
-                            "application/json");
 
-                    con.setDoOutput(true);
-                    OutputStream os = con.getOutputStream();
-                    os.write(getPostDataString(hash).getBytes());
-                    os.flush();
-                    os.close();
-
-                    int responseCode = con.getResponseCode();
-                    Log.e("rasp", "response code-ul e " + Integer.toString(responseCode));
-                    if (responseCode == HttpURLConnection.HTTP_OK) { //success
-                        BufferedReader in = new BufferedReader(new InputStreamReader(
-                                con.getInputStream()));
-                        String inputLine;
-                        StringBuffer response = new StringBuffer();
-                        while ((inputLine = in.readLine()) != null) {
-                            response.append(inputLine);
-                        }
-                        in.close();
-                        Log.e("ceva", response.toString());
-                        return "The account was created!";
-
-                    }
-                    else
-                    {
-                        Log.e("rasp", "POST request not worked");
-                        return "There was a problem signing up! Please check if the data is valid.";
-
-                    }
-                } catch (IOException e)
+                OkHttpClient client = new OkHttpClient();
+                RequestBody requestBody;
+                if(!avatar.equals(""))
                 {
-                    e.printStackTrace();
-
+                    Log.e("mime_type", MEDIA_TYPE.toString());
+                    String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE};
+                    requestPermissions(permissions,1);
+                    requestBody = builder
+                            .setType(MultipartBody.FORM)
+                            .addFormDataPart("avatar", avatar,
+                                    RequestBody.create(MEDIA_TYPE, new File(avatar)))
+                            .build();
                 }
-            }
-            catch (MalformedURLException e)
-            {
-                Log.e("naspa", "E corupt!");
+                else
+                {
+                    requestBody = builder
+                            .setType(MultipartBody.FORM)
+                            .build();
+                }
 
-            }
+                Request request = new Request.Builder()
+                        .header("Accept", "application/json")
+                        .url(site)
+                        .post(requestBody)
+                        .build();
 
-            return ceva;
+                try (Response response = client.newCall(request).execute())
+                {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+                    Log.e("a mers", response.body().string());
+                    return "Account created!";
+                }
+                catch(Exception e)
+                {
+                    Log.e("eroare", e.getMessage());
+                    return "Invalid data!";
+                }
 
         }
 
