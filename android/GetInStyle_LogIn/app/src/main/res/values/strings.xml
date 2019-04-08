@@ -4,7 +4,7 @@
     <string name="logEmailAutoFill">Email</string>
     <string name="logInButtonTitle">Log In</string>
     <string name="logInWithFacebookButtonTitle">Log In with Facebook</string>
-    <string name="signUpMessage">Don\'t have an account?\nNo prob...</string>
+    <string name="signUpMessage">Don\'t have an account?\nNo prob…</string>
     <string name="signUpButtonTitle">Sign Up</string>
     <string name="passwordAutoFill">Password</string>
     <string name="signUpTitle">SIGN UP</string>
@@ -23,4 +23,10 @@
     <string name="chooses_photo_for_create_style">Chooses photo for create style</string>
     <string name="create_style">Create style</string>
     <string name="apply_style">Apply Style</string>
+    <string name="image">Image</string>
+    <string name="comment_1">Lorem ipsum dolor sit amet, ne duo ornatus placerat, causae melius percipitur cum no, ius in civibus democritum omittantur. Eos nisl mundi facilis eu, quaestio abhorreant quo cu, hinc graecis patrioque mea ad. Est in purto illud iriure, has atqui facilisis ut, ne has delenit graecis atomorum. Eos solet docendi lobortis ea. 1</string>
+    <string name="comment_2">Ea inermis senserit honestatis eum, modo illum convenire nec ut, solum maiestatis voluptatibus cum ei. </string>
+    <string name="image_details">Image details</string>
+    <string name="image_info">Image Info</string>
+
 </resources>
