@@ -28,7 +28,7 @@
 
                     <ul class="dropdown-menu dropdown-menu-right">
                        <li>
-                            <a href="{{ route('media.photosByUserId', auth()->user()->name) }}">
+                            <a href="{{ route('media.photosByUserId', Auth::user()->id) }}">
                                 <i class=""></i> My photos
                             </a>
                         </li>

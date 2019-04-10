@@ -134,7 +134,7 @@
 
             if(userId == -1)
                 return;
-            
+
             let _this = e.currentTarget;
 
             // Change like in view

@@ -64,9 +64,9 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         'uses' => 'CommentController@toggleLike',
     ]);
 
-    Route::get('media/{name}', [
+    Route::get('media/user/{userId}', [
         'uses' => 'MediaController@photosByUserId',
-        'as' => 'media.photosByUserId' 
+        'as' => 'media.photosByUserId'
     ]);
 });
 

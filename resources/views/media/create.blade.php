@@ -72,15 +72,33 @@
                     <img id="stylized-image" src="" />
                 </div>
             </div>
-            <div id="fourth-stage-container" class="row center-container">
+            <div id="fourth-stage-container" class="row">
                 @if(Auth::guest())
                     <h3 align="center">Like it? Login or Sign Up to save your image.</h3>
                 @else
-                    <button id="postImageBtn" class="btn btn-success ">Post image</button>
+                    <form action="{{ route('media.store') }}">
+                        <div class="row">
+                            <div class="col-md-4"></div>
+                            <div class="col-md-4">
+                                <div class="content-group-lg">
+                                    <h6 class="text-semibold">Tags</h6>
+                                    <select class="select-multiple-tokenization" multiple="multiple">
+                                        @foreach($tags as $tag)
+                                            <option value="{{ $tag->id }}">{{ $tag->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row center-container">
+                            <button id="postImageBtn" class="btn btn-success">Post image</button>
+                        </div>
+                    </form>
                 @endif
             </div>
         </div>
     </div>
+    <div id="endOfPage"></div>
 @endsection
 
 @push('css')
@@ -347,6 +365,11 @@
 @push('js')
     <script type="text/javascript" src="{{ URL::asset('killercarousel/killercarousel.js') }}"></script>
 
+    <!-- Theme JS files -->
+    <script type="text/javascript" src="{{ URL::asset('limitless/assets/js/core/libraries/jquery_ui/interactions.min.js') }}"></script>
+    <script type="text/javascript" src="{{ URL::asset('limitless/assets/js/plugins/forms/selects/select2.min.js') }}"></script>
+    <!-- /theme JS files -->
+
     <script type = "text/javascript">
         // Create the carousel.
         $(function() {
@@ -404,7 +427,7 @@
                         $('#third-stage-container').css('display', 'block');
                         $('#fourth-stage-container').css('display', 'block');
                         $('html, body').animate({
-                            scrollTop: $('#postImageBtn').offset().top
+                            scrollTop: $('#endOfPage').offset().top
                         }, 800);
                         $('#loadingIcon').toggleClass('loading'); //deactivate the loading screen
                     },
@@ -442,6 +465,13 @@
                         console.log(err);
                     }
                 });
+            });
+
+            // Tags auto-tokenization
+            // Tokenization
+            $(".select-multiple-tokenization").select2({
+                tags: true,
+                tokenSeparators: [",", " "]
             });
         });
 

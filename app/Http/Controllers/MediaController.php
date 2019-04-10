@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Media;
 use App\Style;
+use App\Tag;
 use Illuminate\Http\Request;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
@@ -43,8 +44,9 @@ class MediaController extends Controller
     public function create()
     {
         $styles = Style::all();
-        
-        return view('media.create', compact('styles'));
+        $tags = Tag::all();
+
+        return view('media.create', compact('styles', 'tags'));
     }
 
     /**
