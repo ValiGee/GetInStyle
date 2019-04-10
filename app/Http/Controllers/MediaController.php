@@ -58,6 +58,7 @@ class MediaController extends Controller
     public function store(StoreMediaRequest $request)
     {
         $imagePath = 'storage/' . $request->file('userPhoto')->store('media_upload', 'public');
+        //return response()->json(asset($imagePath)); //uncomment this when you want to test but styling doesn't work
         $style = Style::find($request->style_id);
         $stylizedImagePath = "storage/media_stylized/" . (Auth::check() ? '' : 'temp_') . str_random() . '.jpg';
         

@@ -4,14 +4,48 @@
     <!-- Display photo -->
     <div id="mainContainer" class="content">
         <!-- Post -->
-        <div class="panel">
-            <div class="panel-body">
-                <div class="content-group-lg">
-                    <div class="content-group text-center">
+        <div class="row">
+            <div class="col-lg-4 col-md-3"></div>
+            <div class="col-lg-4 col-md-6">
+                <div class="thumbnail no-padding">
+                    <div class="thumb">
                         <img src="{{ URL::asset($media["stylized_path"]) }}" class="img-responsive display-inline-block" alt="">
+                        <div class="caption-overflow">
+                            <div>
+                                <a href="#" data-popup="lightbox"><i @if($media->liked)
+                                                                         class="media-like icon-heart5 big-icon pink-icon"
+                                                                     @else
+                                                                         class="media-like icon-heart5 big-icon white-icon"
+                                                                     @endif
+                                                                     data-liked="{{ $media->liked }}"></i></a>
+                                <div id="mediaLikesCount">{{ $media->likes_count }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="caption text-center">
+                        <h6 class="text-semibold no-margin">
+                            {{ $media->user->name }}
+                            <small class="display-block">
+                                {{-- uncomment if we will want to display number of likes and comments here as well.
+                                <a href="#" class="text-muted pull-left"><i @if($media->liked)
+                                                                  class="icon-heart5 text-size-base text-pink position-left like-button"
+                                                                  @else
+                                                                  class="icon-heart6 text-size-base text-pink position-left like-button"
+                                                                  @endif
+                                                                  onclick="updateLike(event)"
+                                                                  data-media-id="{{ $media->id }}"
+                                                                  data-liked="{{ $media->liked }}"> {{ $media->likes_count }}</i></a>
+                                <a href="{{ route('media.show', $media->id) }}" onclick="fixAnchorTagClick(event)" class="heading-text pull-right"><i class="icon-comments position-right"></i> {{ sizeof($media->comments) }}</a>
+                                --}}
+                                @foreach($media->tags as $tag)
+                                    #{{ $tag->name }}
+                                @endforeach
+                            </small></h6>
                     </div>
                 </div>
             </div>
+            <div class="col-lg-4 col-md-3"></div>
         </div>
         <!-- /post -->
         <!-- Comments -->
@@ -131,6 +165,30 @@
             background-color: inherit;
             border: none;
         }
+
+        #mainContainer .caption-overflow > div {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            margin-top: -17px;
+            width: 100%;
+        }
+        #mainContainer .big-icon {
+            font-size: 6rem;
+        }
+
+        #mainContainer .white-icon {
+            color: #ffffff;
+        }
+
+        #mainContainer .pink-icon {
+            color: #E91E63;
+        }
+
+        #mainContainer #mediaLikesCount {
+            top: 62%; /* are deja position absolute din functionalitatea thumbnail */
+            font-size: 2rem;
+        }
     </style>
 @endpush
 
@@ -170,7 +228,7 @@
                 });
 
                 //add like functionality
-                //like/unlike
+                //like/unlike for comments
                 $('.text-size-base.text-pink.position-left').on('click', function(e) {
                     e.preventDefault();
 
@@ -191,6 +249,49 @@
                     // Make request
                     let commentId = $(this).data('comment-id');
                     let route = $('#info-comment-id-' + commentId).data('route');
+
+                    let _data = {};
+
+                    let csrf = $('meta[name="csrf-token"]').attr('content');
+
+                    $.ajax({
+                        type: "POST",
+                        url: route,
+                        headers: {
+                            'X-CSRF-TOKEN': csrf
+                        },
+                        data: _data,
+                        success: function(resp) {
+                            console.log(resp);
+                        },
+                        error: function(err) {
+                            console.log(err);
+                        }
+                    });
+                });
+
+                //like/unlike for media
+                $('.media-like').on('click', function(e) {
+                    e.preventDefault();
+
+                    // Change like in view
+                    let liked = this.dataset.liked;
+                    let likesCountContainer = document.getElementById('mediaLikesCount');
+                    let likes_count = parseInt(likesCountContainer.innerText);
+                    if(liked == 0) {
+                        likes_count = likes_count + 1;
+                    }
+                    else {
+                        likes_count = likes_count - 1;
+                    }
+                    likesCountContainer.innerText = likes_count;
+                    this.dataset.liked = 1 - liked;
+                    this.classList.toggle('white-icon');
+                    this.classList.toggle('pink-icon');
+
+                    // Make request
+                    let mediaId = {{ $media->id }};
+                    let route = '{{ route('media.like', $media->id) }}';
 
                     let _data = {};
 

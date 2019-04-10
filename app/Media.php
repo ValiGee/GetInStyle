@@ -27,4 +27,8 @@ class Media extends Model
     public function likes() {
         return $this->morphMany(Like::class, 'likable');
     }
+
+    public function tags() {
+        return $this->belongsToMany(Tag::class, 'media_tag');
+    }
 }
