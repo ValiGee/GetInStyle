@@ -27,7 +27,11 @@
                     </a>
 
                     <ul class="dropdown-menu dropdown-menu-right">
-                        {{--<li><a href="{{ url('../media/photosByUserId/'. ['user_id' => $user->id]) }}"><i class="icon-user-plus"></i> My profile</a></li>--}}
+                       <li>
+                            <a href="{{ route('media.photosByUserId', auth()->user()->name) }}">
+                                <i class=""></i> My photos
+                            </a>
+                        </li>
                         <li>
                             <a href="{{ route('logout') }}"
                                onclick="event.preventDefault();

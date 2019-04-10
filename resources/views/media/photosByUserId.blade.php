@@ -3,24 +3,6 @@
 @section('content')
     <!-- Display photos -->
     <div id="photos-container">
-        @foreach($media as $_media)
-            <div class="panel panel-flat animation" data-animation="bounceInLeft" style="visibility: visible;">
-                <div class="panel-body">
-                    <img src={{ URL::asset($_media["stylized_path"]) }}>
-                </div>
-                <div class="panel-footer panel-footer-condensed">
-                    <div class="heading-elements not-collapsible">
-                        <ul class="list-inline list-inline-separate heading-text text-muted">
-                            <li>
-                                <a href="#" class="text-muted"><i class="icon-heart6 text-size-base text-pink position-left"></i>14</a>
-                            </li>
-                        </ul>
-                        <a href="#" class="heading-text pull-right"><i class="icon-comments position-right"></i> 5</a>
-                    </div>
-                </div>
-            </div>
-            @endif
-        @endforeach
         @foreach($photos as $_media)
             <div class="panel panel-flat animation" data-animation="bounceInLeft" style="visibility: visible;">
                 <div class="panel-body">

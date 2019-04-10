@@ -43,7 +43,6 @@ Route::post('media', [
 
 Route::group(['middleware' => ['web', 'auth']], function () {
     $user_id = Auth::id();
-    Route::get('media/photosByUserId/{user_id}', ['as' => 'media.photosByUserId', 'uses' => 'MediaController@photosByUserId']);
 
     Route::delete('media/{media}', [
         'uses' => 'MediaController@delete',
@@ -63,6 +62,11 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     Route::post('comments/{comment}/like', [
         'as' => 'comments.like',
         'uses' => 'CommentController@toggleLike',
+    ]);
+
+    Route::get('media/{name}', [
+        'uses' => 'MediaController@photosByUserId',
+        'as' => 'media.photosByUserId' 
     ]);
 });
 
