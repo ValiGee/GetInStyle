@@ -104,8 +104,8 @@ class MediaController extends Controller
         $media = Media::create([
             'user_id' => Auth::id(),
             'style_id' => $request->style_id,
-            'path' => $renamedOriginalPath,
-            'stylized_path' => $renamedStylizedPath,
+            'path' => $request->original_path,
+            'stylized_path' => $request->stylized_path,
         ]);
 
         $tagsList = [];
@@ -118,6 +118,7 @@ class MediaController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => 'Picture saved successfully!',
+                'model' => $media,
             ]);
         } else {
             return redirect()->route('media.show', $media->id);
