@@ -31,7 +31,7 @@ import okhttp3.Response;
 public class SignUpActivity extends AppCompatActivity {
 
     public void testButtonOnClick(View view){
-        startActivity(new Intent(SignUpActivity.this, LoadPictureForApplyStyle.class));
+        startActivity(new Intent(SignUpActivity.this, PhotoPage.class));
     }
 
     EditText email, name, password, confirm_password;
