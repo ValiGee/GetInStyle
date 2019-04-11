@@ -31,7 +31,7 @@ import okhttp3.Response;
 public class SignUpActivity extends AppCompatActivity {
 
     public void testButtonOnClick(View view){
-        startActivity(new Intent(SignUpActivity.this, PhotoPage.class));
+        startActivity(new Intent(SignUpActivity.this, LoadPictureForApplyStyle.class));
     }
 
     EditText email, name, password, confirm_password;
@@ -42,6 +42,7 @@ public class SignUpActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+        site_ul = getApplicationContext().getResources().getString(R.string.site);
         email = (EditText) findViewById(R.id.email);
         name = (EditText) findViewById(R.id.name);
         password = (EditText) findViewById(R.id.password);
@@ -81,7 +82,7 @@ public class SignUpActivity extends AppCompatActivity {
         startActivityForResult(intent,GALLERY_REQUEST_CODE);
     }
 
-    String site_ul = "http://192.168.0.112:8000";
+    String site_ul;
     String avatar = "";
     MediaType MEDIA_TYPE;
 

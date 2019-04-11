@@ -28,9 +28,9 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity {
 
     String site_ul;
-    String client_id = "2";
-    String client_secret = "Ky9urT4kG8DHmb8PDwKPC3i6sgtIek3v79lXa1Ca";
-    String access_token;
+    String client_id = "4";
+    String client_secret = "g7OQnwMfenDQs0wk19ls5OOJfmjn7o4Eveh4lFYC";
+    public static String access_token;
     EditText email, password;
 
 
