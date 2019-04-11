@@ -25,9 +25,9 @@ Route::get('media/{media}', [
     'as' => 'api.media.show'
 ]);
 
-Route::post('media', [
-    'uses' => 'MediaController@store',
-    'as' => 'api.media.store'
+Route::post('media/preview', [
+    'uses' => 'MediaController@preview',
+    'as' => 'api.media.preview'
 ]);
 
 Route::post('register', [
@@ -41,6 +41,11 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::delete('media/{media}', [
         'uses' => 'MediaController@delete',
         'as' => 'api.media.delete'
+    ]);
+
+    Route::post('media', [
+        'uses' => 'MediaController@store',
+        'as' => 'api.media.store'
     ]);
 
     Route::post('comments/store', [

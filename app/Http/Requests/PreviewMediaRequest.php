@@ -3,9 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Auth;
 
-class StoreMediaRequest extends FormRequest
+class PreviewMediaRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -14,7 +13,7 @@ class StoreMediaRequest extends FormRequest
      */
     public function authorize()
     {
-        return Auth::check();
+        return true;
     }
 
     /**
@@ -25,9 +24,8 @@ class StoreMediaRequest extends FormRequest
     public function rules()
     {
         return [
-            'stylized_path' => 'required|string',
-            'original_path' => 'required|string',
             'style_id' => 'required|integer|exists:styles,id',
+            'userPhoto' => 'required|file|image|max:51200', // 50MB limit size
         ];
     }
 }
