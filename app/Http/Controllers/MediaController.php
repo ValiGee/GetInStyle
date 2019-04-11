@@ -36,6 +36,18 @@ class MediaController extends Controller
         }
     }
 
+    public function photosByUserId($userId)
+    {
+        $media = Auth::user()->media()->get();
+
+        if (request()->wantsJson()) {
+            return response()->json($media);
+        } else {
+            $userId = Auth::id();
+            return view('media.photosByUserId', compact('media', 'userId'));
+        }
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -149,13 +161,7 @@ class MediaController extends Controller
         //
     }
 
-    public function photosByUserId($user_id)
-    {
-        $photos = Auth::user()->media()->get();
-        //$media = Media::with['user_id' -> $user_id];
-        return view('media.photosByUserId', $photos);
-        //return view('media.photosByUserId', $media);
-    }
+    
 
     public function toggleLike(Media $media)
     {
