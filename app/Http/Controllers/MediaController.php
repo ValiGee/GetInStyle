@@ -69,13 +69,13 @@ class MediaController extends Controller
         $style = Style::find($request->style_id);
         $stylizedImagePath = "storage/media_stylized/" . str_replace(['/', '.', ','], '', str_random()) . '.jpg';
         
-        // $process = new Process('python3 ' . base_path() . '/style_transfer.py --model ' . base_path($style->model_path) . " --image " . public_path("$imagePath") . " --output " . public_path("$stylizedImagePath"));
-        // $process->run();
+        $process = new Process('python3 ' . base_path() . '/style_transfer.py --model ' . base_path($style->model_path) . " --image " . public_path("$imagePath") . " --output " . public_path("$stylizedImagePath"));
+        $process->run();
 
-        // if (!$process->isSuccessful()) {
-        //     throw new ProcessFailedException($process);
-        //     return view('errors.media');
-        // }
+        if (!$process->isSuccessful()) {
+            throw new ProcessFailedException($process);
+            return view('errors.media');
+        }
 
         return response()->json([
             'stylized_path' => $stylizedImagePath,

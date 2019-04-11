@@ -423,7 +423,7 @@
                     success:function(response, status, xhr){
                         stylizedImageUrl = response['stylized_path'];
                         console.log(response);
-                        $('#stylized-image').attr('src', '/' + response['stylized_path']);
+                        $('#stylized-image').attr('src', window.location.host + response['stylized_path']);
                         $('#third-stage-container').css('display', 'block');
                         $('#fourth-stage-container').css('display', 'block');
                         $('html, body').animate({
