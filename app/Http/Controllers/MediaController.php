@@ -8,6 +8,7 @@ use App\Tag;
 use Illuminate\Http\Request;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
+use App\Http\Requests\PreviewMediaRequest;
 use App\Http\Requests\StoreMediaRequest;
 use Auth;
 use Storage;
@@ -61,6 +62,28 @@ class MediaController extends Controller
         return view('media.create', compact('styles', 'tags'));
     }
 
+    public function preview(PreviewMediaRequest $request)
+    {
+        $imagePath = 'storage/' . $request->file('userPhoto')->store('media_upload', 'public');
+        //return response()->json(asset($imagePath)); //uncomment this when you want to test but styling doesn't work
+        $style = Style::find($request->style_id);
+        $stylizedImagePath = "storage/media_stylized/" . str_replace(['/', '.', ','], '', str_random()) . '.jpg';
+        
+        // $process = new Process('python3 ' . base_path() . '/style_transfer.py --model ' . base_path($style->model_path) . " --image " . public_path("$imagePath") . " --output " . public_path("$stylizedImagePath"));
+        // $process->run();
+
+        // if (!$process->isSuccessful()) {
+        //     throw new ProcessFailedException($process);
+        //     return view('errors.media');
+        // }
+
+        return response()->json([
+            'stylized_path' => $stylizedImagePath,
+            'original_path' => $imagePath,
+            'style_id' => $style->id,
+        ]);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -69,31 +92,37 @@ class MediaController extends Controller
      */
     public function store(StoreMediaRequest $request)
     {
-        $imagePath = 'storage/' . $request->file('userPhoto')->store('media_upload', 'public');
-        //return response()->json(asset($imagePath)); //uncomment this when you want to test but styling doesn't work
-        $style = Style::find($request->style_id);
-        $stylizedImagePath = "storage/media_stylized/" . (Auth::check() ? '' : 'temp_') . str_random() . '.jpg';
-        
-        $process = new Process('python3 ' . base_path() . '/style_transfer.py --model ' . base_path($style->model_path) . " --image " . public_path("$imagePath") . " --output " . public_path("$stylizedImagePath"));
-        $process->run();
-
-        if (!$process->isSuccessful()) {
-            throw new ProcessFailedException($process);
-            return view('errors.media');
+        if (!file_exists(public_path($request->original_path)) || !file_exists(public_path($request->stylized_path))) {
+            abort(422);
         }
 
-        if (Auth::check()) {
-            $media = Media::create([
-                'user_id' => Auth::id(),
-                'style_id' => $style->id,
-                'path' => $imagePath,
-                'stylized_path' => $stylizedImagePath,
+        // $renamedOriginalPath = str_replace('temp_', '', $request->original_path);
+        // $renamedStylizedPath = str_replace('temp_', '', $request->stylized_path);
+        // Storage::disk('public')->move($request->original_path, $renamedOriginalPath);
+        // Storage::disk('public')->move($request->stylized_path, $renamedStylizedPath);
+
+        $media = Media::create([
+            'user_id' => Auth::id(),
+            'style_id' => $request->style_id,
+            'path' => $request->original_path,
+            'stylized_path' => $request->stylized_path,
+        ]);
+
+        $tagsList = [];
+        foreach ($request->tags as $tag) {
+            $tagsList[] = Tag::firstOrCreate(['name' => $tag])->id;
+        }
+        $media->tags()->sync($tagsList);
+
+        if (request()->wantsJson()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Picture saved successfully!',
+                'model' => $media,
             ]);
         } else {
-            Storage::disk('public')->delete(substr($imagePath, strpos($imagePath, 'media_upload')));
+            return redirect()->route('media.show', $media->id);
         }
-
-        return response()->json(asset($stylizedImagePath));
     }
 
     /**
@@ -114,7 +143,7 @@ class MediaController extends Controller
             $query->withCount(['likes as liked' => function ($q) {
                 $q->where('user_id', Auth::id());
             }]);
-        }]);
+        }, 'tags']);
         $media->likes_count = $media->likes()->count();
         $media->liked = $media->likes()->where('user_id', Auth::check() ? Auth::id() : 0)->count();
 
@@ -160,8 +189,6 @@ class MediaController extends Controller
     {
         //
     }
-
-    
 
     public function toggleLike(Media $media)
     {

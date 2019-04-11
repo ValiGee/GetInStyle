@@ -38,7 +38,7 @@
                     <button class="btn btn-info">+</button>
                 </div>
             </div>
-            <form id="main-form" action="{{ route('media.store') }}">
+            <form id="main-form" action="{{ route('media.preview') }}">
                 @csrf
                 <div id="second-stage-container" class="row">
                     <div class="col-md-12">
@@ -421,9 +421,9 @@
                     processData: false,
                     contentType: false,
                     success:function(response, status, xhr){
-                        stylizedImageUrl = response;
+                        stylizedImageUrl = response['stylized_path'];
                         console.log(response);
-                        $('#stylized-image').attr('src', response);
+                        $('#stylized-image').attr('src', '/' + response['stylized_path']);
                         $('#third-stage-container').css('display', 'block');
                         $('#fourth-stage-container').css('display', 'block');
                         $('html, body').animate({

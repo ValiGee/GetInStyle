@@ -36,9 +36,9 @@ Route::get('media/{media}', [
     'as' => 'media.show'
 ]);
 
-Route::post('media', [
-    'uses' => 'MediaController@store',
-    'as' => 'media.store'
+Route::post('media/preview', [
+    'uses' => 'MediaController@preview',
+    'as' => 'media.preview'
 ]);
 
 Route::group(['middleware' => ['web', 'auth']], function () {
@@ -47,6 +47,11 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     Route::delete('media/{media}', [
         'uses' => 'MediaController@delete',
         'as' => 'media.delete'
+    ]);
+
+    Route::post('media', [
+        'uses' => 'MediaController@store',
+        'as' => 'media.store'
     ]);
 
     Route::post('comments/store', [
