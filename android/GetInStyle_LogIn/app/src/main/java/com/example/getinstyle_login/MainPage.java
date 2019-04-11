@@ -108,6 +108,7 @@ public class MainPage extends AppCompatActivity {
                         List<String> poza = new ArrayList<String>();
                         poza.add(poze.getJSONObject(i).getString("path"));
                         poza.add(Integer.toString(poze.getJSONObject(i).getInt("likes_count")));
+                        poza.add(Integer.toString(poze.getJSONObject(i).getInt("id")));
                         pozele.add(new ArrayList<String>(poza));
                     };
 

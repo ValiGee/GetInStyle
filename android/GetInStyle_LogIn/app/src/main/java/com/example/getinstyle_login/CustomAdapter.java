@@ -22,6 +22,15 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -50,6 +59,8 @@ class CustomAdapter extends ArrayAdapter<ArrayList<String>> {
     static class ViewHolder {
         ImageView photo, like_button;
         TextView likes_count;
+        String id;
+        boolean liked = false;
     }
     ViewHolder ceva;
 
@@ -71,14 +82,21 @@ class CustomAdapter extends ArrayAdapter<ArrayList<String>> {
             //setat valori
             Picasso.get().load(site + variabile.get(0)).into(holder.photo);
             holder.likes_count.setText(variabile.get(1));
+            holder.id = variabile.get(2);
+
+            holder.like_button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(final View v) {
+                new ATask((ViewHolder) v.getTag()).execute(holder.id);
+            }
+        });
 
             itemView.setTag(holder);
+        holder.like_button.setTag(holder);
 
         return itemView;
     }
 
-
-    /* Va trebui sa o folosim cand bagam si like
+    /*
     private String getPostDataString(HashMap<String, String> params) throws UnsupportedEncodingException {
         StringBuilder result = new StringBuilder();
         boolean first = true;
@@ -93,47 +111,33 @@ class CustomAdapter extends ArrayAdapter<ArrayList<String>> {
             result.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
         }
         return result.toString();
-    }
+    }*/
 
-    public class ATask extends AsyncTask<String[], Void, String> {
-        String altceva = "";
+
+    public class ATask extends AsyncTask<String, Void, String> {
         ViewHolder myHolder;
         public ATask(ViewHolder view) {
             myHolder = view;
             ceva = myHolder;
-            room_id = myHolder.room_id;
         }
         @Override
-        protected String doInBackground(String[]... urls) {
+        protected String doInBackground(String... id) {
             //try {
             try {
-                String site = urls[0][0];
-                String current_action = urls[0][1];
-                Integer cate = Integer.parseInt(urls[1][0]);
-                HashMap<String, String> hash = new HashMap<String, String>();
-                for(int i = 1; i <= cate; i += 2)
-                {
-                    String a = urls[1][i];
-                    String b = urls[1][i + 1];
-                    hash.put(a, b);
-                    Log.e("bola", a + b);
-                }
-                Log.e("rasp", site);
-                URL obj = new URL(site);
+                String site_ul = site + "api/media/" + id[0] + "/like";
+                Log.e("rasp", site_ul);
+                URL obj = new URL(site_ul);
                 try {
                     Log.e("rasp", obj.toString());
                     HttpURLConnection con = (HttpURLConnection) obj.openConnection();
                     con.setRequestMethod("POST");
                     con.setRequestProperty("Content-Type",
                             "application/x-www-form-urlencoded");
-                    //con.setRequestProperty("User-Agent", USER_AGENT);
-                    // For POST only - START
-                    con.setDoOutput(true);
-                    OutputStream os = con.getOutputStream();
-                    os.write(getPostDataString(hash).getBytes());
-                    os.flush();
-                    os.close();
-                    // For POST only - END
+                    con.setRequestProperty("Authorization",
+                            "Bearer " + MainActivity.access_token);
+                    con.setRequestProperty("Accept",
+                            "application/json");
+
                     int responseCode = con.getResponseCode();
                     Log.e("rasp", "response code-ul e " + Integer.toString(responseCode));
                     if (responseCode == HttpURLConnection.HTTP_OK) { //success
@@ -146,82 +150,46 @@ class CustomAdapter extends ArrayAdapter<ArrayList<String>> {
                         }
                         in.close();
                         // print result
-                        coada.add(current_action);
-                        coada2.add(response.toString());
-                        coada3.add(true);
+                        Log.e("raspuns", response.toString());
+                        return "OK";
                     }
                     else
                     {
                         Log.e("rasp", "POST request not worked");
-                        coada3.add(false);
+                        return "There was a problem communicating with the server!";
                     }
                 } catch (IOException e)
                 {
                     e.printStackTrace();
-                    coada3.add(false);
                 }
             }
             catch (MalformedURLException e)
             {
                 Log.e("naspa", "E corupt!");
-                coada3.add(false);
+                return "There was a problem connecting to the server!";
             }
-            //} catch (Exception e) {
-            // Log.e("rasp", "aia e");
-            //}
-            return altceva;
+
+            return "Unknown error!";
         }
         // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(String result) {
-            Boolean success = coada3.poll();
-            if(success)
+            if(!result.equals("OK"))
+                Toast.makeText(contextRooms, result, Toast.LENGTH_LONG).show();
+            else
             {
-                String actiune = coada.poll();
-                String rezultat = coada2.poll();
-                if(!rezultat.equals("Wrong room!"))
+                if(myHolder.liked == false)
                 {
-                    if(actiune.equals("CheckPass"))
-                    {
-                        if(rezultat.equals("OK"))
-                        {
-                            String site = site_ul + "/checkstart";
-                            String current_action = "CheckStart";
-                            String[] primele = new String[2];
-                            primele[0] = site;
-                            primele[1] = current_action;
-                            String urmatoarele[] = new String[3];
-                            urmatoarele[0] = "1";
-                            urmatoarele[1] = "room";
-                            urmatoarele[2] = myHolder.room_id;
-                            new ATask(myHolder).execute(primele, urmatoarele);
-                        }
-                        else
-                            Toast.makeText(contextRooms, rezultat, Toast.LENGTH_LONG).show();
-                    }
-                    else if(actiune.equals("CheckStart"))
-                    {
-                        if(rezultat.equals("Nu"))
-                        {
-                            Intent incercare = new Intent(contextRooms, BeforeGame.class);
-                            incercare.putExtra("nume", Rooms.name);
-                            incercare.putExtra("room", myHolder.room_id);
-                            incercare.putExtra("room_name", myHolder.camera.getText().toString());
-                            incercare.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            contextRooms.startActivity(incercare);
-                        }
-                        else
-                            Toast.makeText(contextRooms, "Jocul a inceput deja!", Toast.LENGTH_LONG).show();
-                    }
+                    myHolder.likes_count.setText(Integer.toString(Integer.parseInt(myHolder.likes_count.getText().toString()) + 1));
+                    myHolder.liked = true;
                 }
                 else
                 {
-                    Toast.makeText(contextRooms, "Camera nu mai exista!", Toast.LENGTH_LONG).show();
+                    myHolder.likes_count.setText(Integer.toString(Integer.parseInt(myHolder.likes_count.getText().toString()) - 1));
+                    myHolder.liked = false;
                 }
             }
-            else
-                Toast.makeText(contextRooms, "Eroare la conexiunea la server!", Toast.LENGTH_LONG).show();
         }
     }
-    */
+
 }
