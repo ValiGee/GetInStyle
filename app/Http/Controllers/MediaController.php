@@ -108,6 +108,12 @@ class MediaController extends Controller
             'stylized_path' => $renamedStylizedPath,
         ]);
 
+        $tagsList = [];
+        foreach ($request->tags as $tag) {
+            $tagsList[] = Tag::firstOrCreate(['name' => $tag])->id;
+        }
+        $media->tags()->sync($tagsList);
+
         if (request()->wantsJson()) {
             return response()->json([
                 'status' => 'success',
@@ -136,7 +142,7 @@ class MediaController extends Controller
             $query->withCount(['likes as liked' => function ($q) {
                 $q->where('user_id', Auth::id());
             }]);
-        }]);
+        }, 'tags']);
         $media->likes_count = $media->likes()->count();
         $media->liked = $media->likes()->where('user_id', Auth::check() ? Auth::id() : 0)->count();
 
