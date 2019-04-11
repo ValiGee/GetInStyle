@@ -16,6 +16,7 @@
         <activity android:name=".PhotoPage"></activity>
         <activity android:name=".LoadPictureForApplyStyle" />
         <activity android:name=".LoadPictureForStyle" />
+        <activity android:name=".MainPage" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

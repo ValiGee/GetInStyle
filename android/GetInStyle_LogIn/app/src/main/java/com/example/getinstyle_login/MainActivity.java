@@ -27,7 +27,7 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    String site_ul = "http://192.168.0.112:8000";
+    String site_ul;
     String client_id = "2";
     String client_secret = "Ky9urT4kG8DHmb8PDwKPC3i6sgtIek3v79lXa1Ca";
     String access_token;
@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         email = (EditText) findViewById(R.id.email);
         password = (EditText) findViewById(R.id.password);
-
+        site_ul = getApplicationContext().getResources().getString(R.string.site);
     }
 
     private String getPostDataString(HashMap<String, String> params) throws UnsupportedEncodingException {
@@ -176,7 +176,9 @@ public class MainActivity extends AppCompatActivity {
         // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(String result) {
-                Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
+            if(result.equals("Logged in successfully!"))
+                startActivity(new Intent(MainActivity.this, MainPage.class));
         }
     }
 }
