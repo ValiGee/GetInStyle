@@ -108,21 +108,19 @@ class MediaController extends Controller
             'stylized_path' => $request->stylized_path,
         ]);
 
-        $tagsList = [];
-        foreach ($request->tags as $tag) {
-            $tagsList[] = Tag::firstOrCreate(['name' => $tag])->id;
+        if ($request->tags) {
+            $tagsList = [];
+            foreach ($request->tags as $tag) {
+                $tagsList[] = Tag::firstOrCreate(['name' => $tag])->id;
+            }
+            $media->tags()->sync($tagsList);
         }
-        $media->tags()->sync($tagsList);
 
-        if (request()->wantsJson()) {
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Picture saved successfully!',
-                'model' => $media,
-            ]);
-        } else {
-            return redirect()->route('media.show', $media->id);
-        }
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Picture saved successfully!',
+            'model' => $media,
+        ]);
     }
 
     /**

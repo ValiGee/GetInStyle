@@ -78,7 +78,7 @@
                 @else
                     <form id="postImageForm" action="{{ route('media.store') }}" method="POST">
                         <input id="postImage_style_id" name="style_id" type="hidden" value="" />
-                        <input id="postImage_original_path" name="path" type="hidden" value="" />
+                        <input id="postImage_original_path" name="original_path" type="hidden" value="" />
                         <input id="postImage_stylized_path" name="stylized_path" type="hidden" value="" />
                         @csrf
                         <div class="row">
@@ -86,7 +86,7 @@
                             <div class="col-md-4">
                                 <div class="content-group-lg">
                                     <h6 class="text-semibold">Tags</h6>
-                                    <select id="postImage_tags" name="tags" class="select-multiple-tokenization" multiple="multiple">
+                                    <select id="postImage_tags" name="tags[]" class="select-multiple-tokenization" multiple="multiple">
                                         @foreach($tags as $tag)
                                             <option value="{{ $tag->name }}">{{ $tag->name }}</option>
                                         @endforeach
@@ -451,21 +451,28 @@
                 let form = $(this);
                 event.preventDefault();
 
-                let formData = {
-                    "style_id": $('#postImage_style_id').val(),
-                    "original_path": $('#postImage_original_path').val(),
-                    "stylized_path": $('#postImage_stylized_path').val(),
-                    "tags": $('#postImage_tags').val()
-                };
+                // let formData = new FormData();
+                // formData.append('_token', $('input[name="_token"]').val());
+                // formData.append('style_id', $('#postImage_style_id').val());
+                // formData.append('original_path', $('#postImage_original_path').val());
+                // formData.append('stylized_path', $('#postImage_stylized_path').val());
+                // formData.append('tags[]', $('#postImage_tags').val());
 
-                console.log(formData);
+                // let formData = {
+                //     "style_id": $('#postImage_style_id').val(),
+                //     "original_path": $('#postImage_original_path').val(),
+                //     "stylized_path": $('#postImage_stylized_path').val()
+                //     // "tags[]": $('#postImage_tags').val()
+                // };
+
+                console.log(new FormData(this));
                 let URL = $(this).attr('action');
                 $('#loadingIcon').toggleClass('loading'); //activate the loading screen
 
                 $.ajax({
                     url: URL,
                     type: 'post',
-                    data: formData, // Remember that you need to have your csrf token included
+                    data: new FormData(this), // Remember that you need to have your csrf token included
                     processData: false,
                     contentType: false,
                     success:function(response, status, xhr){
