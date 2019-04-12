@@ -74,30 +74,7 @@
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentEnd="true"
                         android:layout_margin="5dp"
-                        tools:ignore="UseCompoundDrawables">
-
-                        <ImageView
-                            android:id="@+id/dislike_button"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:layout_margin="5dp"
-                            android:src="@drawable/ic_thumb_down_white_24dp"
-                            tools:ignore="ContentDescription" />
-
-                        <TextView
-                            android:id="@+id/dislikes_count"
-                            android:layout_width="wrap_content"
-                            android:layout_height="40dp"
-                            android:layout_marginTop="20dp"
-                            android:fontFamily="@font/lato_black"
-                            android:text="99"
-                            android:layout_margin="5dp"
-                            android:textAlignment="inherit"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="@color/colorPrimaryLight"
-                            android:textSize="25sp" />
-
-                    </LinearLayout>
+                        tools:ignore="UseCompoundDrawables"/>
 
                 </RelativeLayout>
 
