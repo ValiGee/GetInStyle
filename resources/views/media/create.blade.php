@@ -76,15 +76,19 @@
                 @if(Auth::guest())
                     <h3 align="center">Like it? Login or Sign Up to save your image.</h3>
                 @else
-                    <form action="{{ route('media.store') }}">
+                    <form id="postImageForm" action="{{ route('media.store') }}" method="POST">
+                        <input id="postImage_style_id" name="style_id" type="hidden" value="" />
+                        <input id="postImage_original_path" name="original_path" type="hidden" value="" />
+                        <input id="postImage_stylized_path" name="stylized_path" type="hidden" value="" />
+                        @csrf
                         <div class="row">
                             <div class="col-md-4"></div>
                             <div class="col-md-4">
                                 <div class="content-group-lg">
                                     <h6 class="text-semibold">Tags</h6>
-                                    <select class="select-multiple-tokenization" multiple="multiple">
+                                    <select id="postImage_tags" name="tags[]" class="select-multiple-tokenization" multiple="multiple">
                                         @foreach($tags as $tag)
-                                            <option value="{{ $tag->id }}">{{ $tag->name }}</option>
+                                            <option value="{{ $tag->name }}">{{ $tag->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -430,6 +434,11 @@
                             scrollTop: $('#endOfPage').offset().top
                         }, 800);
                         $('#loadingIcon').toggleClass('loading'); //deactivate the loading screen
+
+                        //Store response in the form to be submitted if image is posted
+                        $('#postImage_style_id').val(response.style_id);
+                        $('#postImage_original_path').val(response.original_path);
+                        $('#postImage_stylized_path').val(response.stylized_path);
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown) {
                         alert("Status: " + textStatus); alert("Error: " + errorThrown);
@@ -438,31 +447,47 @@
                 });
             });
 
-            $('#postImageBtn').on('click', function(e) {
-                let route = "{{ route('media.store') }}";
+            $('#postImageForm').submit(function( event ) {
+                let form = $(this);
+                event.preventDefault();
 
-                let _data = {
-                    user_id: userId,
-                    media_id: mediaId,
-                    message: _message,
-                    parent_id: commentId
-                };
+                // let formData = new FormData();
+                // formData.append('_token', $('input[name="_token"]').val());
+                // formData.append('style_id', $('#postImage_style_id').val());
+                // formData.append('original_path', $('#postImage_original_path').val());
+                // formData.append('stylized_path', $('#postImage_stylized_path').val());
+                // formData.append('tags[]', $('#postImage_tags').val());
 
-                let csrf = $('meta[name="csrf-token"]').attr('content');
+                // let formData = {
+                //     "style_id": $('#postImage_style_id').val(),
+                //     "original_path": $('#postImage_original_path').val(),
+                //     "stylized_path": $('#postImage_stylized_path').val()
+                //     // "tags[]": $('#postImage_tags').val()
+                // };
+
+                console.log(new FormData(this));
+                let URL = $(this).attr('action');
+                $('#loadingIcon').toggleClass('loading'); //activate the loading screen
 
                 $.ajax({
-                    type: "POST",
-                    url: route,
-                    headers: {
-                        'X-CSRF-TOKEN': csrf
+                    url: URL,
+                    type: 'post',
+                    data: new FormData(this), // Remember that you need to have your csrf token included
+                    processData: false,
+                    contentType: false,
+                    success:function(response, status, xhr){
+                        stylizedImageUrl = response['stylized_path'];
+                        $('#stylized-image').attr('src', 'http://' + window.location.host + '/' + response['stylized_path']);
+                        $('#third-stage-container').css('display', 'block');
+                        $('#fourth-stage-container').css('display', 'block');
+                        $('html, body').animate({
+                            scrollTop: $('#endOfPage').offset().top
+                        }, 800);
+                        $('#loadingIcon').toggleClass('loading'); //deactivate the loading screen
                     },
-                    data: _data,
-                    success: function(resp) {
-                        console.log(resp);
-                        location.reload(); //reincarcam pagina
-                    },
-                    error: function(err) {
-                        console.log(err);
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                        alert("Status: " + textStatus); alert("Error: " + errorThrown);
+                        $('#loadingIcon').toggleClass('loading'); //deactivate the loading screen
                     }
                 });
             });
