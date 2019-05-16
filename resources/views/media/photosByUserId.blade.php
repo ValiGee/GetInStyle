@@ -300,6 +300,7 @@
             // Make request
             let mediaId = $(_this).data('media-id');
             let route = $('#info-media-id-' + mediaId).data('route');
+            console.log("Acolo");
 
             let _data = {};
 
