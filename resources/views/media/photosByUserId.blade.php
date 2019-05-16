@@ -3,6 +3,7 @@
 @section('content')
     <!-- Display photos -->
     <div id="mainContainer" class="content">
+        @if(count($media)) 
         @foreach($media as $_media)
         <div class="row">
             <div class="col-lg-4 col-md-3"></div>
@@ -36,9 +37,15 @@
                 </div>
         </div>
         <div class="col-lg-4 col-md-3"></div>
+        
     </div>
     <hr>
     @endforeach
+    @else 
+        <div id="loadingIcon"></div>
+            <h3 align="center">Nu ai incarcat inca imagini.</h3>
+        </div>
+    @endif
     </div>
     <!-- /Display photos -->
 @endsection
@@ -218,27 +225,29 @@
                     this.classList.toggle('pink-icon');
 
                     // Make request
-                    let mediaId = {{ $_media->id }};
-                    let route = '{{ route('media.like', $_media->id) }}';
+                    
+                        let mediaId = $(_this).data('media-id');
+                        let route = $('#info-media-id-' + mediaId).data('route');
 
-                    let _data = {};
+                        let _data = {};
 
-                    let csrf = $('meta[name="csrf-token"]').attr('content');
+                        let csrf = $('meta[name="csrf-token"]').attr('content');
 
-                    $.ajax({
-                        type: "POST",
-                        url: route,
-                        headers: {
-                            'X-CSRF-TOKEN': csrf
-                        },
-                        data: _data,
-                        success: function(resp) {
-                            console.log(resp);
-                        },
-                        error: function(err) {
-                            console.log(err);
-                        }
-                    });
+                        $.ajax({
+                            type: "POST",
+                            url: route,
+                            headers: {
+                                'X-CSRF-TOKEN': csrf
+                            },
+                            data: _data,
+                            success: function(resp) {
+                                console.log(resp);
+                            },
+                            error: function(err) {
+                                console.log(err);
+                            }
+                        });
+                    //}
                 });
 
        
@@ -291,6 +300,7 @@
             // Make request
             let mediaId = $(_this).data('media-id');
             let route = $('#info-media-id-' + mediaId).data('route');
+            console.log("Acolo");
 
             let _data = {};
 
