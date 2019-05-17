@@ -1,0 +1,12 @@
+#searchInput {
+    position: relative;
+    display: block;
+    line-height: 20px;
+    margin-top: 10px;
+    margin-left: 10px;
+    color: black;
+    padding: 5px 0px 5px 10px;
+    border: 0px solid black;
+    border-radius: 5px;
+    width: 200px;
+}

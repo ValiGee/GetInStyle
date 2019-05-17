@@ -73,6 +73,11 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         'uses' => 'MediaController@photosByUserId',
         'as' => 'media.photosByUserId'
     ]);
+
+    Route::post('media/search', [
+        'as' => 'media.search',
+        'uses' => 'MediaController@search',
+    ]);
 });
 
 Auth::routes();

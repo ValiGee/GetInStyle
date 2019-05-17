@@ -74,7 +74,7 @@
 
                                     <div class="media-body">
                                         <div class="media-heading">
-                                            <a href="#" class="text-semibold">{{ $comment->user->name }}</a>
+                                            <a href="{{ route('media.photosByUserId', $comment->user->id) }}" class="text-semibold">{{ $comment->user->name }}</a>
                                             <span class="comment-date media-annotation dotted" style="display: none">
                                                 {{ $comment->created_at }}
                                             </span>
@@ -103,7 +103,7 @@
                                         @foreach($comment->replies as $reply)
                                             <div class="media">
                                                 <div class="media-left">
-                                                    <a href="#"><img src="{{ url($comment->user->avatar) }}" class="img-circle img-sm" alt=""></a>
+                                                    <a href="{{ route('media.photosByUserId', $reply->user->id) }}"><img src="{{ url($reply->user->avatar) }}" class="img-circle img-sm" alt=""></a>
                                                 </div>
 
                                                 <div class="media-body">
@@ -272,6 +272,7 @@
 
                 //like/unlike for media
                 $('.media-like').on('click', function(e) {
+                    console.log('click');
                     e.preventDefault();
 
                     // Change like in view
@@ -436,6 +437,16 @@
                             console.log(err);
                         }
                     });
+                });
+            } else { /* If user is not logged in, stop various default functionalities */
+                $('.text-size-base.text-pink.position-left').on('click', function(e) {
+                    e.preventDefault();
+                });
+                $('.reply-a').on('click', function(e) {
+                    e.preventDefault();
+                });
+                $('.media-like').on('click', function(e) {
+                    e.preventDefault();
                 });
             }
         });

@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use App\Media;
 use App\Style;
 use App\Tag;
+use App\User;
 use Illuminate\Http\Request;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use App\Http\Requests\PreviewMediaRequest;
 use App\Http\Requests\StoreMediaRequest;
+use App\Http\Requests\SearchMediaRequest;
 use Auth;
 use Storage;
 use App\Like;
@@ -39,7 +41,9 @@ class MediaController extends Controller
 
     public function photosByUserId($userId)
     {
-        $media = Auth::user()->media()->get();
+        $user = User::findOrFail($userId);
+
+        $media = $user->media()->get();
 
         if (request()->wantsJson()) {
             return response()->json($media);
@@ -121,6 +125,31 @@ class MediaController extends Controller
             'message' => 'Picture saved successfully!',
             'model' => $media,
         ]);
+    }
+
+    public function search(SearchMediaRequest $request)
+    {
+        //$request->tags is an array containing a single string, all the tags
+        $tagsStr = str_replace("#", "", $request->tags[0]);
+        $tagsArr = explode(" ", $tagsStr);
+        $tagNames = [];
+        foreach ($tagsArr as $tag) {
+            if ($tag != "") {
+                array_push($tagNames, $tag);
+            }
+        }
+
+        //TODO : find media objects filtering by tagNames. Consider case insensitive names comparison
+        //TODO : also need likes count, comments count, if i liked a media, etc. just like we do in 'index' page
+        $media = Media::paginate(5);
+
+        if (request()->wantsJson()) {
+            return response()->json($media);
+        } else {
+            $userId = Auth::id();
+            $searchPlaceholder = $request->tags[0];
+            return view('media.search', compact('media', 'userId', 'searchPlaceholder'));
+        }
     }
 
     /**

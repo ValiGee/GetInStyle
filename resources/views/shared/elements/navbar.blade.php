@@ -12,6 +12,13 @@
 
         <ul class="nav navbar-nav">
             <li><a href="{{ route('media.create') }}">Stylize</a></li>
+            <li>
+                <form id="searchForm" action="{{ route('media.search') }}" method="POST">
+                    @csrf
+                    <input id="searchInput" name="tags[]" type="text" placeholder="Search tags ..."
+                           autocomplete="off">
+                </form>
+            </li>
         </ul>
 
         <ul class="nav navbar-nav navbar-right">
