@@ -43,7 +43,7 @@
     @endforeach
     @else 
         <div id="loadingIcon"></div>
-            <h3 align="center">Nu ai incarcat inca imagini.</h3>
+            <h3 align="center">You did not upload any images yet.</h3>
         </div>
     @endif
     </div>
