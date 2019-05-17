@@ -55,7 +55,6 @@
 <script type="text/javascript" src="{{ URL::asset('limitless/assets/js/core/libraries/bootstrap.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('limitless/assets/js/plugins/loaders/blockui.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('limitless/assets/js/plugins/ui/nicescroll.min.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('limitless/assets/js/plugins/ui/drilldown.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('limitless/assets/js/plugins/ui/fab.min.js') }}"></script>
 <!-- /core JS files -->
 
