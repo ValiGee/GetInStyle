@@ -19,6 +19,8 @@
     <link href="{{ URL::asset('limitless/assets/css/customcss.css') }}" rel="stylesheet" type="text/css">
     <!-- /global stylesheets -->
 
+    <link rel="shortcut icon" type="image/png" href="{{ URL::asset('limitless/assets/images/faviconV2.ico') }}"/>
+
     @stack('css')
 
 </head>

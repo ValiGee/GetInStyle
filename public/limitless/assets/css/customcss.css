@@ -10,3 +10,77 @@
     border-radius: 5px;
     width: 200px;
 }
+
+.dropdown.dropdown-user .dropdown-toggle img {
+    width: 36px !important;
+    height: 36px !important;
+}
+
+.navbar-brand {
+    padding: 0;
+    margin-top: 10px;
+}
+
+.navbar-brand img {
+    width: 36px !important;
+    height: 36px !important;
+}
+
+.panel-footer .icon-heart5, .panel-footer .icon-heart6 {
+    margin-right: 5px;
+}
+
+.navbar li a {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.panel {
+    border: none;
+}
+
+.panel-footer {
+    border: none;
+}
+
+.thumbnail {
+    border: none;
+}
+
+/* Below is an alternate page style */
+/*
+.panel-footer a {
+    color: #fff;
+}
+
+.panel-footer .icon-comments {
+    color: #166dba;
+}
+
+body {
+    background-color: #2e3035;
+}
+
+.page-header {
+    background-color: #46025b;
+}
+
+.panel {
+    border: none;
+    background-color: #474a51;
+}
+
+.panel-footer {
+    background-color: #474a51;
+    border: none;
+}
+
+.thumbnail {
+    border: none;
+}
+
+.thumbnail .caption {
+    background-color: #474a51;
+    color: #fff;
+}
+*/
