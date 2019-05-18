@@ -29,6 +29,8 @@
                 </div>
             </div>
         @endforeach
+    </div>
+    <div id="pagination-links">
         {{ $media->links() }}
     </div>
     <!-- /Display photos -->
@@ -108,6 +110,20 @@
         padding: 0;
     }
 
+    #pagination-links {
+        width: 80%;
+        margin: 0 auto;
+    }
+
+    #pagination-links > ul.pagination {
+        position: relative;
+        left: 40%;
+    }
+
+    #pagination-links > ul.pagination li.active span {
+        background-color: #273246;
+        border-color: #273246;
+    }
 
     /* TODO: test without this */
     body {
