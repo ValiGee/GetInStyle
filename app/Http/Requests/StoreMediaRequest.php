@@ -28,6 +28,7 @@ class StoreMediaRequest extends FormRequest
             'stylized_path' => 'required|string',
             'original_path' => 'required|string',
             'style_id' => 'required|integer|exists:styles,id',
+            'description' => 'nullable|string',
             'tags' => 'nullable|array|max:5',
             'tags.*' => 'required|string|max:255',
         ];

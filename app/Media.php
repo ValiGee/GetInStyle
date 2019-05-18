@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Media extends Model
 {
-    public $fillable = ['user_id', 'path', 'style_id', 'stylized_path'];
+    public $fillable = ['user_id', 'path', 'style_id', 'stylized_path', 'description'];
 
     public function style() {
         return $this->belongsTo(Style::class);

@@ -29,6 +29,7 @@
                 </div>
             </div>
         @endforeach
+        {{ $media->links() }}
     </div>
     <!-- /Display photos -->
 @endsection

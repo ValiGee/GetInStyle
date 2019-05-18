@@ -15,6 +15,7 @@ use App\Http\Requests\SearchMediaRequest;
 use Auth;
 use Storage;
 use App\Like;
+use DB;
 
 class MediaController extends Controller
 {
@@ -29,7 +30,7 @@ class MediaController extends Controller
             $query->where('user_id', Auth::check() ? Auth::id() : 0);
         }]);
 
-        $media = $media->get();
+        $media = $media->paginate(50);
 
         if (request()->wantsJson()) {
             return response()->json($media);
@@ -110,6 +111,7 @@ class MediaController extends Controller
             'style_id' => $request->style_id,
             'path' => $request->original_path,
             'stylized_path' => $request->stylized_path,
+            'description' => $request->description,
         ]);
 
         if ($request->tags) {
@@ -129,6 +131,7 @@ class MediaController extends Controller
 
     public function search(SearchMediaRequest $request)
     {
+        $tags = $request->tags;
         //$request->tags is an array containing a single string, all the tags
         $tagsStr = str_replace("#", "", $request->tags[0]);
         $tagsArr = explode(" ", $tagsStr);
@@ -138,17 +141,22 @@ class MediaController extends Controller
                 array_push($tagNames, $tag);
             }
         }
+        $tagNames = array_map('strtolower', $tagNames);
 
         //TODO : find media objects filtering by tagNames. Consider case insensitive names comparison
         //TODO : also need likes count, comments count, if i liked a media, etc. just like we do in 'index' page
-        $media = Media::paginate(5);
+        $media = Media::whereHas('tags', function ($query) use ($tagNames) {
+            $query->whereIn(DB::raw('lower(name)'), $tagNames);
+        })->withCount(['likes', 'comments', 'likes as liked' => function ($query) {
+            $query->where('user_id', Auth::id());
+        }])->paginate(50);
 
         if (request()->wantsJson()) {
             return response()->json($media);
         } else {
             $userId = Auth::id();
             $searchPlaceholder = $request->tags[0];
-            return view('media.search', compact('media', 'userId', 'searchPlaceholder'));
+            return view('media.search', compact('media', 'userId', 'searchPlaceholder', 'tags'));
         }
     }
 

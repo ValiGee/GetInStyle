@@ -31,18 +31,16 @@ Route::get('media/create', [
     'as' => 'media.create'
 ]);
 
-Route::get('media/{media}', [
-    'uses' => 'MediaController@show',
-    'as' => 'media.show'
-]);
-
 Route::post('media/preview', [
     'uses' => 'MediaController@preview',
     'as' => 'media.preview'
 ]);
 
 Route::group(['middleware' => ['web', 'auth']], function () {
-    $user_id = Auth::id();
+    Route::get('media/search', [
+        'as' => 'media.search',
+        'uses' => 'MediaController@search',
+    ]);
 
     Route::delete('media/{media}', [
         'uses' => 'MediaController@delete',
@@ -73,12 +71,12 @@ Route::group(['middleware' => ['web', 'auth']], function () {
         'uses' => 'MediaController@photosByUserId',
         'as' => 'media.photosByUserId'
     ]);
-
-    Route::post('media/search', [
-        'as' => 'media.search',
-        'uses' => 'MediaController@search',
-    ]);
 });
+
+Route::get('media/{media}', [
+    'uses' => 'MediaController@show',
+    'as' => 'media.show'
+]);
 
 Auth::routes();
 

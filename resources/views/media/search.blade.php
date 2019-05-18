@@ -29,7 +29,7 @@
                 </div>
             </div>
         @endforeach
-        {{ $media->links() }}
+        {{ $media->appends(['tags' => $tags])->links() }}
     </div>
     <!-- /Display photos -->
 @endsection
