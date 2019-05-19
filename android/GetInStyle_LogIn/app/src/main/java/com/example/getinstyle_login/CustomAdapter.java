@@ -53,7 +53,7 @@ class CustomAdapter extends ArrayAdapter<ArrayList<String>> {
         }
         contextRooms = context;
     }
-    String site = "http://10.11.1.64:8000/";
+    String site = "http://192.168.43.61:8000/";
 
 
     static class ViewHolder {
