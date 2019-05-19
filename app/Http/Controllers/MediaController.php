@@ -58,10 +58,8 @@ class MediaController extends Controller
         }
     }
 
-    public function photosByUserId($userId)
+    public function photosByUserId(User $user)
     {
-        $user = User::findOrFail($userId);
-
         $media = $user->media()->get();
 
         if (request()->wantsJson()) {
