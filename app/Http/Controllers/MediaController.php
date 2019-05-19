@@ -48,20 +48,18 @@ class MediaController extends Controller
             $query->where('user_id', Auth::check() ? Auth::id() : 0);
         }])->orderBy($sortByColumn, $sortByOrder);
 
-        $media = $media->paginate(50);
-
         if (request()->wantsJson()) {
+            $media = $media->get();
             return response()->json($media);
         } else {
             $userId = Auth::id();
+            $media = $media->paginate(50);
             return view('media.index', compact('media', 'userId', 'sortColumn', 'sortOrder', 'sortByColumn', 'sortByOrder'));
         }
     }
 
-    public function photosByUserId($userId)
+    public function photosByUserId(User $user)
     {
-        $user = User::findOrFail($userId);
-
         $media = $user->media()->get();
 
         if (request()->wantsJson()) {
@@ -180,12 +178,14 @@ class MediaController extends Controller
             $query->whereIn(DB::raw('lower(name)'), $tagNames);
         })->withCount(['likes', 'comments', 'likes as liked' => function ($query) {
             $query->where('user_id', Auth::id());
-        }])->orderBy($sortByColumn, $sortByOrder)->paginate(50);
+        }])->orderBy($sortByColumn, $sortByOrder);
 
         if (request()->wantsJson()) {
+            $media = $media->get();
             return response()->json($media);
         } else {
             $userId = Auth::id();
+            $media = $media->paginate(50);
             $searchPlaceholder = $request->tags[0];
             return view('media.search', compact('media', 'userId', 'searchPlaceholder', 'tags', 'sortColumn', 'sortOrder', 'sortByColumn', 'sortByOrder'));
         }

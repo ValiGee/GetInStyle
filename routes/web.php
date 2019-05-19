@@ -31,17 +31,22 @@ Route::get('media/create', [
     'as' => 'media.create'
 ]);
 
+Route::get('media/search', [
+    'as' => 'media.search',
+    'uses' => 'MediaController@search',
+]);
+
+Route::get('media/user/{user}', [
+    'uses' => 'MediaController@photosByUserId',
+    'as' => 'media.photosByUserId'
+]);
+
 Route::post('media/preview', [
     'uses' => 'MediaController@preview',
     'as' => 'media.preview'
 ]);
 
 Route::group(['middleware' => ['web', 'auth']], function () {
-    Route::get('media/search', [
-        'as' => 'media.search',
-        'uses' => 'MediaController@search',
-    ]);
-
     Route::delete('media/{media}', [
         'uses' => 'MediaController@delete',
         'as' => 'media.delete'
@@ -65,11 +70,6 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     Route::post('comments/{comment}/like', [
         'as' => 'comments.like',
         'uses' => 'CommentController@toggleLike',
-    ]);
-
-    Route::get('media/user/{userId}', [
-        'uses' => 'MediaController@photosByUserId',
-        'as' => 'media.photosByUserId'
     ]);
 });
 
