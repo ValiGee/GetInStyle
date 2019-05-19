@@ -69,18 +69,18 @@
                             @if(is_null($comment->parent_id))
                                 <li class="media">
                                     <div class="media-left">
-                                        <a href="#"><img src="{{ url($comment->user->avatar) }}" class="img-circle img-sm" alt=""></a>
+                                        <a href="{{ route('media.photosByUserId', $comment->user->id) }}"><img src="{{ url($comment->user->avatar) }}" class="img-circle img-sm" alt=""></a>
                                     </div>
 
                                     <div class="media-body">
                                         <div class="media-heading">
-                                            <a href="#" class="text-semibold">{{ $comment->user->name }}</a>
+                                            <a href="{{ route('media.photosByUserId', $comment->user->id) }}" class="text-semibold">{{ $comment->user->name }}</a>
                                             <span class="comment-date media-annotation dotted" style="display: none">
                                                 {{ $comment->created_at }}
                                             </span>
                                         </div>
 
-                                        <p>{!! $comment->message /* parse the string as html */ !!}</p>
+                                        {!! $comment->message /* parse the string as html */ !!}
 
                                         <div id="info-comment-id-{{ $comment->id }}"
                                              data-route="{{ route('comments.like', $comment->id) }}"></div>
@@ -93,8 +93,8 @@
                                                                   data-comment-id="{{ $comment->id }}"
                                                                   data-liked="{{ $comment->liked }}"> {{ $comment->likes_count }}</i></a></li>
                                             <li><a href="#" class="reply-a" data-comment-id="{{ $comment->id }}">Reply</a></li>
-                                            <li style="visibility: hidden"><a href="#" class="reply-discard-a" data-comment-id="{{ $comment->id }}">Discard</a></li>
-                                            <li style="visibility: hidden"><a href="#" class="reply-submit-a" data-comment-id="{{ $comment->id }}">Add reply</a></li>
+                                            <li style="visibility: hidden"><a href="#" class="reply-discard-a btn" data-comment-id="{{ $comment->id }}">Discard</a></li>
+                                            <li style="visibility: hidden"><a href="#" class="reply-submit-a btn" data-comment-id="{{ $comment->id }}">Add reply</a></li>
                                         </ul>
 
                                         <div id="ck_placeholder_{{ $comment->id }}"></div>
@@ -103,18 +103,18 @@
                                         @foreach($comment->replies as $reply)
                                             <div class="media">
                                                 <div class="media-left">
-                                                    <a href="#"><img src="{{ url($comment->user->avatar) }}" class="img-circle img-sm" alt=""></a>
+                                                    <a href="{{ route('media.photosByUserId', $reply->user->id) }}"><img src="{{ url($reply->user->avatar) }}" class="img-circle img-sm" alt=""></a>
                                                 </div>
 
                                                 <div class="media-body">
                                                     <div class="media-heading">
-                                                        <a href="#" class="text-semibold">{{ $reply->user->name }}</a>
+                                                        <a href="{{ route('media.photosByUserId', $reply->user->id) }}" class="text-semibold">{{ $reply->user->name }}</a>
                                                         <span class="comment-date media-annotation dotted" style="display: none">
                                                             {{ $reply->created_at }}
                                                         </span>
                                                     </div>
 
-                                                    <p>{!! $reply->message /* parse the string as html */ !!}</p>
+                                                    {!! $reply->message /* parse the string as html */ !!}
 
                                                     <div id="info-comment-id-{{ $reply->id }}"
                                                          data-route="{{ route('comments.like', $reply->id) }}"></div>
@@ -188,6 +188,16 @@
         #mainContainer #mediaLikesCount {
             top: 62%; /* are deja position absolute din functionalitatea thumbnail */
             font-size: 2rem;
+        }
+
+        .reply-discard-a, .reply-submit-a {
+            background-color: #1E88E5;
+            color: #fff;
+            padding: 2px 5px 2px 5px;
+        }
+
+        .media .media-body p:nth-child(3) {
+            display: none; /* fixes <p> under emoji images. TODO : work around this */
         }
     </style>
 @endpush
@@ -272,6 +282,7 @@
 
                 //like/unlike for media
                 $('.media-like').on('click', function(e) {
+                    console.log('click');
                     e.preventDefault();
 
                     // Change like in view
@@ -342,6 +353,7 @@
                     let submit_a = reply_a.parentNode.nextElementSibling.children[0];
 
                     reply_a.parentNode.style.visibility = "visible";
+                    reply_a.style.marginBottom = "5px";
                     submit_a.parentNode.style.visibility = "visible";
                 });
                 //when clicking on 'Discard'
@@ -436,6 +448,16 @@
                             console.log(err);
                         }
                     });
+                });
+            } else { /* If user is not logged in, stop various default functionalities */
+                $('.text-size-base.text-pink.position-left').on('click', function(e) {
+                    e.preventDefault();
+                });
+                $('.reply-a').on('click', function(e) {
+                    e.preventDefault();
+                });
+                $('.media-like').on('click', function(e) {
+                    e.preventDefault();
                 });
             }
         });

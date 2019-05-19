@@ -16,7 +16,10 @@
     <link href="{{ URL::asset('limitless/assets/css/core.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ URL::asset('limitless/assets/css/components.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ URL::asset('limitless/assets/css/colors.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ URL::asset('limitless/assets/css/customcss.css') }}" rel="stylesheet" type="text/css">
     <!-- /global stylesheets -->
+
+    <link rel="shortcut icon" type="image/png" href="{{ URL::asset('limitless/assets/images/faviconV2.ico') }}"/>
 
     @stack('css')
 
@@ -54,7 +57,6 @@
 <script type="text/javascript" src="{{ URL::asset('limitless/assets/js/core/libraries/bootstrap.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('limitless/assets/js/plugins/loaders/blockui.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('limitless/assets/js/plugins/ui/nicescroll.min.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('limitless/assets/js/plugins/ui/drilldown.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('limitless/assets/js/plugins/ui/fab.min.js') }}"></script>
 <!-- /core JS files -->
 
@@ -63,6 +65,8 @@
 <script type="text/javascript" src="{{ URL::asset('limitless/assets/js/core/app.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('limitless/assets/js/pages/components_popups.js') }}"></script>
 <!-- /theme JS files -->
+
+<script type="text/javascript" src="{{ URL::asset('limitless/assets/js/customjs.js') }}"></script>
 
 @stack('js')
 

@@ -3,8 +3,9 @@
 @section('content')
     <!-- Display photos -->
     <div id="sort-container">
-        <form id="sort-form" action="{{ route('media.index') }}" method="GET">
+        <form id="sort-form" action="{{ route('media.search') }}" method="GET">
             @csrf
+            <input id="searchInputHidden" type="hidden" name="tags[]">
             <label for="sortColumn">Sort by</label>
             <select name="sortColumn" id="sort-column-select">
                 @foreach($sortColumn as $display => $val)
@@ -27,7 +28,7 @@
             </select>
         </form>
     </div>
-    <div id="photos-container">
+    <div id="photos-container" class="infinite-scroll">
         @foreach($media as $_media)
             <div class="panel panel-flat">
                 <div class="panel-body">
@@ -46,7 +47,7 @@
                                                                   @endif
                                                                   onclick="updateLike(event)"
                                                                   data-media-id="{{ $_media->id }}"
-                                                                  data-liked="{{ $_media->liked }}"></i>{{ $_media->likes_count }}</a>
+                                                                  data-liked="{{ $_media->liked }}"> {{ $_media->likes_count }}</i></a>
                             </li>
                         </ul>
                         <a href="{{ route('media.show', $_media->id) }}" onclick="fixAnchorTagClick(event)" class="heading-text pull-right"><i class="icon-comments position-right"></i> {{ sizeof($_media->comments) }}</a>
@@ -54,9 +55,7 @@
                 </div>
             </div>
         @endforeach
-    </div>
-    <div id="pagination-links">
-        {{ $media->appends(['sortColumn' => $sortByColumn, 'sortOrder' => $sortByOrder])->links() }}
+        {{ $media->appends(['tags' => $tags, 'sortColumn' => $sortByColumn, 'sortOrder' => $sortByOrder])->links() }}
     </div>
     <!-- /Display photos -->
 @endsection
@@ -72,11 +71,11 @@
         /* Prevent vertical gaps */
         line-height: 0;
 
-        -webkit-column-count: 5;
+        -webkit-column-count: 4;
         -webkit-column-gap:   5px;
-        -moz-column-count:    5;
+        -moz-column-count:    4;
         -moz-column-gap:      5px;
-        column-count:         5;
+        column-count:         4;
         column-gap:           5px;
     }
 
@@ -135,20 +134,6 @@
         padding: 0;
     }
 
-    #pagination-links {
-        width: 80%;
-        margin: 0 auto;
-    }
-
-    #pagination-links > ul.pagination {
-        position: relative;
-        left: 40%;
-    }
-
-    #pagination-links > ul.pagination li.active span {
-        background-color: #273246;
-        border-color: #273246;
-    }
 
     /* TODO: test without this */
     body {
@@ -162,16 +147,31 @@
     <script type="text/javascript" src="{{ URL::asset('limitless/assets/js/core/libraries/jquery_ui/interactions.min.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('limitless/assets/js/core/libraries/jquery_ui/touch.min.js') }}"></script>
 
+    <script src="//unpkg.com/jscroll/dist/jquery.jscroll.min.js"></script>
     <script type="text/javascript">
-        window.onload = function(e) {
-            userId = @php if(Auth::guest()) echo -1; else echo $userId; @endphp;
-        };
-
-        function fixAnchorTagClick(e) { //Fara event listener nu se deschidea link-ul
-            window.location.href = e.currentTarget.href;
-        }
-
+        /*
+        $('ul.pagination').hide();
         $(function() {
+            $('.infinite-scroll').jscroll({
+                autoTrigger: true,
+                loadingHtml: '<img class="center-block" src="/images/loading.gif" alt="Loading..." />',
+                padding: 0,
+                nextSelector: '.pagination li.active + li a',
+                contentSelector: 'div.infinite-scroll',
+                callback: function() {
+                    $('ul.pagination').remove();
+                }
+            });
+        });*/
+    </script>
+
+    <script type="text/javascript">
+        $(function() {
+            //IN SEARCH PAGE
+            $('#searchInput').val('{{ $searchPlaceholder }}');
+
+            $('#searchInputHidden').val('{{ $searchPlaceholder }}');
+
             $('#sort-form select').on('change', function(e) {
                 let sortColumnSelect = $('#sort-column-select');
                 let sortOrderSelect = $('#sort-order-select');
@@ -184,6 +184,14 @@
                 $('#sort-form').submit();
             });
         });
+
+        window.onload = function(e) {
+            userId = @php if(Auth::guest()) echo -1; else echo $userId; @endphp;
+        };
+
+        function fixAnchorTagClick(e) { //Fara event listener nu se deschidea link-ul
+            window.location.href = e.currentTarget.href;
+        }
 
         function updateLike(e) {
             e.preventDefault();
