@@ -62,6 +62,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(MainActivity.this, SignUpActivity.class));
     }
 
+    public void testButtonOnClick(View view){
+        startActivity(new Intent(MainActivity.this, LoadPictureForApplyStyle.class));
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

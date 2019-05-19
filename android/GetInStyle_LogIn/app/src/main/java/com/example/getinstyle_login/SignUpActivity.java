@@ -30,10 +30,6 @@ import okhttp3.Response;
 
 public class SignUpActivity extends AppCompatActivity {
 
-    public void testButtonOnClick(View view){
-        startActivity(new Intent(SignUpActivity.this, LoadPictureForApplyStyle.class));
-    }
-
     EditText email, name, password, confirm_password;
     private ImageView imageView;
     public static final int GALLERY_REQUEST_CODE = 1;

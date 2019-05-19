@@ -105,6 +105,17 @@
                 android:textAlignment="center"
                 android:textColor="@color/colorPrimaryLight" />
 
+            <ImageView
+                android:id="@+id/stylized_image"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:contentDescription="@string/chooses_photo_for_create_style"
+                android:src="@mipmap/ic_launcher" />
+
         </LinearLayout>
 
     </ScrollView>
