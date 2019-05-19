@@ -53,7 +53,7 @@ class CustomAdapter extends ArrayAdapter<ArrayList<String>> {
         }
         contextRooms = context;
     }
-    String site = "http://10.11.1.64:8000/";
+    String site = "http://192.168.43.61:8000/";
 
 
     static class ViewHolder {
@@ -181,11 +181,13 @@ class CustomAdapter extends ArrayAdapter<ArrayList<String>> {
                 if(myHolder.liked == false)
                 {
                     myHolder.likes_count.setText(Integer.toString(Integer.parseInt(myHolder.likes_count.getText().toString()) + 1));
+                    myHolder.like_button.setImageResource(R.drawable.ic_thumb_up_blue_24dp);
                     myHolder.liked = true;
                 }
                 else
                 {
                     myHolder.likes_count.setText(Integer.toString(Integer.parseInt(myHolder.likes_count.getText().toString()) - 1));
+                    myHolder.like_button.setImageResource(R.drawable.ic_thumb_up_white_24dp);
                     myHolder.liked = false;
                 }
             }

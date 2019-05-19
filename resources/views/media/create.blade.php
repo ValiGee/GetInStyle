@@ -484,6 +484,8 @@
                             scrollTop: $('#endOfPage').offset().top
                         }, 800);
                         $('#loadingIcon').toggleClass('loading'); //deactivate the loading screen
+                        // TODO: CEVAa
+                        window.location = 'http://' + window.location.host + '/media/' + response['model'].id;
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown) {
                         alert("Status: " + textStatus); alert("Error: " + errorThrown);
