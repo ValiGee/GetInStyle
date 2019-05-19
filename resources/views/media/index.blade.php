@@ -31,7 +31,7 @@
         @endforeach
     </div>
     <div id="pagination-links">
-        {{ $media->links() }}
+        {{ $media->appends(['sortColumn' => $sortByColumn, 'sortOrder' => $sortByOrder])->links() }}
     </div>
     <!-- /Display photos -->
 @endsection

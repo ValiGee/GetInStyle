@@ -24,11 +24,29 @@ class MediaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $this->validate($request, [
+            'sortColumn' => 'sometimes|string|in:likes_count,created_at',
+            'sortOrder' => 'sometimes|string|in:asc,desc',
+        ]);
+
+        $sortColumn = [
+            'Number of likes' => 'likes_count',
+            'Date' => 'created_at',
+        ];
+
+        $sortOrder = [
+            'Ascendent' => 'asc',
+            'Descendent' => 'desc',
+        ];
+
+        $sortByColumn = $request->sortColumn ?? 'created_at';
+        $sortByOrder = $request->sortOrder ?? 'desc';
+
         $media = Media::with(['user'])->withCount('likes')->withCount('comments')->withCount(['likes as liked' => function ($query) {
             $query->where('user_id', Auth::check() ? Auth::id() : 0);
-        }]);
+        }])->orderBy($sortByColumn, $sortByOrder);
 
         $media = $media->paginate(50);
 
@@ -36,7 +54,7 @@ class MediaController extends Controller
             return response()->json($media);
         } else {
             $userId = Auth::id();
-            return view('media.index', compact('media', 'userId'));
+            return view('media.index', compact('media', 'userId', 'sortColumn', 'sortOrder', 'sortByColumn', 'sortByOrder'));
         }
     }
 
@@ -131,6 +149,19 @@ class MediaController extends Controller
 
     public function search(SearchMediaRequest $request)
     {
+        $sortColumn = [
+            'Number of likes' => 'likes_count',
+            'Date' => 'created_at',
+        ];
+
+        $sortOrder = [
+            'Ascendent' => 'asc',
+            'Descendent' => 'desc',
+        ];
+
+        $sortByColumn = $request->sortColumn ?? 'created_at';
+        $sortByOrder = $request->sortOrder ?? 'desc';
+
         $tags = $request->tags;
         //$request->tags is an array containing a single string, all the tags
         $tagsStr = str_replace("#", "", $request->tags[0]);
@@ -149,14 +180,14 @@ class MediaController extends Controller
             $query->whereIn(DB::raw('lower(name)'), $tagNames);
         })->withCount(['likes', 'comments', 'likes as liked' => function ($query) {
             $query->where('user_id', Auth::id());
-        }])->paginate(50);
+        }])->orderBy($sortByColumn, $sortByOrder)->paginate(50);
 
         if (request()->wantsJson()) {
             return response()->json($media);
         } else {
             $userId = Auth::id();
             $searchPlaceholder = $request->tags[0];
-            return view('media.search', compact('media', 'userId', 'searchPlaceholder', 'tags'));
+            return view('media.search', compact('media', 'userId', 'searchPlaceholder', 'tags', 'sortColumn', 'sortOrder', 'sortByColumn', 'sortByOrder'));
         }
     }
 

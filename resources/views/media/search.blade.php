@@ -29,7 +29,7 @@
                 </div>
             </div>
         @endforeach
-        {{ $media->appends(['tags' => $tags])->links() }}
+        {{ $media->appends(['tags' => $tags, 'sortColumn' => $sortByColumn, 'sortOrder' => $sortByOrder])->links() }}
     </div>
     <!-- /Display photos -->
 @endsection

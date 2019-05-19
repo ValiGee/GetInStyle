@@ -27,6 +27,8 @@ class SearchMediaRequest extends FormRequest
         return [
             'tags' => 'nullable|array|max:5',
             'tags.*' => 'required|string|max:255',
+            'sortColumn' => 'sometimes|string|in:likes_count,created_at',
+            'sortOrder' => 'sometimes|string|in:asc,desc',
         ];
     }
 }
