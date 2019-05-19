@@ -2,6 +2,32 @@
 
 @section('content')
     <!-- Display photos -->
+    <div id="sort-container">
+        <form id="sort-form" action="{{ route('media.search') }}" method="GET">
+            @csrf
+            <input id="searchInputHidden" type="hidden" name="tags[]">
+            <label for="sortColumn">Sort by</label>
+            <select name="sortColumn" id="sort-column-select">
+                @foreach($sortColumn as $display => $val)
+                    @if($val == $sortByColumn)
+                        <option value="{{ $val }}" selected>{{ $display }}</option>
+                    @else
+                        <option value="{{ $val }}">{{ $display }}</option>
+                    @endif
+                @endforeach
+            </select>
+            <label for="sortOrder">Order</label>
+            <select name="sortOrder" id="sort-order-select">
+                @foreach($sortOrder as $display => $val)
+                    @if($val == $sortByOrder)
+                        <option value="{{ $val }}" selected>{{ $display }}</option>
+                    @else
+                        <option value="{{ $val }}">{{ $display }}</option>
+                    @endif
+                @endforeach
+            </select>
+        </form>
+    </div>
     <div id="photos-container" class="infinite-scroll">
         @foreach($media as $_media)
             <div class="panel panel-flat">
@@ -143,6 +169,20 @@
         $(function() {
             //IN SEARCH PAGE
             $('#searchInput').val('{{ $searchPlaceholder }}');
+
+            $('#searchInputHidden').val('{{ $searchPlaceholder }}');
+
+            $('#sort-form select').on('change', function(e) {
+                let sortColumnSelect = $('#sort-column-select');
+                let sortOrderSelect = $('#sort-order-select');
+
+                let selectedColumn = sortColumnSelect.children("option:selected").val();
+                let selectedOrder = sortOrderSelect.children("option:selected").val();
+
+                console.log('Selected Column : ' + selectedColumn + ' ; Selected Order : ' + selectedOrder);
+
+                $('#sort-form').submit();
+            });
         });
 
         window.onload = function(e) {

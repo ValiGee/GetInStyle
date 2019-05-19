@@ -37,8 +37,8 @@ class MediaController extends Controller
         ];
 
         $sortOrder = [
-            'Ascendent' => 'asc',
-            'Descendent' => 'desc',
+            'Ascending' => 'asc',
+            'Descending' => 'desc',
         ];
 
         $sortByColumn = $request->sortColumn ?? 'created_at';
@@ -155,8 +155,8 @@ class MediaController extends Controller
         ];
 
         $sortOrder = [
-            'Ascendent' => 'asc',
-            'Descendent' => 'desc',
+            'Ascending' => 'asc',
+            'Descending' => 'desc',
         ];
 
         $sortByColumn = $request->sortColumn ?? 'created_at';

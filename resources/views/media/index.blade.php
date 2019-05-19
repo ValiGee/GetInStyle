@@ -2,6 +2,31 @@
 
 @section('content')
     <!-- Display photos -->
+    <div id="sort-container">
+        <form id="sort-form" action="{{ route('media.index') }}" method="GET">
+            @csrf
+            <label for="sortColumn">Sort by</label>
+            <select name="sortColumn" id="sort-column-select">
+                @foreach($sortColumn as $display => $val)
+                    @if($val == $sortByColumn)
+                        <option value="{{ $val }}" selected>{{ $display }}</option>
+                    @else
+                        <option value="{{ $val }}">{{ $display }}</option>
+                    @endif
+                @endforeach
+            </select>
+            <label for="sortOrder">Order</label>
+            <select name="sortOrder" id="sort-order-select">
+                @foreach($sortOrder as $display => $val)
+                    @if($val == $sortByOrder)
+                        <option value="{{ $val }}" selected>{{ $display }}</option>
+                    @else
+                        <option value="{{ $val }}">{{ $display }}</option>
+                    @endif
+                @endforeach
+            </select>
+        </form>
+    </div>
     <div id="photos-container">
         @foreach($media as $_media)
             <div class="panel panel-flat">
@@ -145,6 +170,20 @@
         function fixAnchorTagClick(e) { //Fara event listener nu se deschidea link-ul
             window.location.href = e.currentTarget.href;
         }
+
+        $(function() {
+            $('#sort-form select').on('change', function(e) {
+                let sortColumnSelect = $('#sort-column-select');
+                let sortOrderSelect = $('#sort-order-select');
+
+                let selectedColumn = sortColumnSelect.children("option:selected").val();
+                let selectedOrder = sortOrderSelect.children("option:selected").val();
+
+                console.log('Selected Column : ' + selectedColumn + ' ; Selected Order : ' + selectedOrder);
+
+                $('#sort-form').submit();
+            });
+        });
 
         function updateLike(e) {
             e.preventDefault();
