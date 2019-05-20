@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void testButtonOnClickTest(View view){
-        startActivity(new Intent(MainActivity.this, MainPage.class));
+        startActivity(new Intent(MainActivity.this, PhotoPage.class));
     }
 
     @Override
