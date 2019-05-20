@@ -84,7 +84,7 @@
                     android:id="@+id/tags_container"
                     android:orientation="horizontal">
 
-
+                    <!-- SE COMPLETEAZA AUTOMAT CU TAGURI -->
 
                 </LinearLayout>
 

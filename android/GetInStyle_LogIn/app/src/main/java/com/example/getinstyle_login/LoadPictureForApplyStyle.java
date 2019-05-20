@@ -40,22 +40,33 @@ import okhttp3.Response;
 
 public class LoadPictureForApplyStyle extends AppCompatActivity {
 
-    private int[] styles = { R.drawable.candy,
-                             R.drawable.composition_vii,
+    private int[] styles = { R.drawable.composition_vii,
                              R.drawable.la_muse,
-                             R.drawable.mosaic,
-                             R.drawable.starry_night_crop,
+                             R.drawable.starry_night,
+                             R.drawable.the_wave,
+                             R.drawable.candy,
+                             R.drawable.feathers,
                              R.drawable.the_scream,
+                             R.drawable.mosaic,
                              R.drawable.udnie,
-                             R.drawable.wave_crop};
-    private ImageView imageView, stylized_image;
+                             R.drawable.gold_black,
+                             R.drawable.triangles,
+                             R.drawable.pink,
+                             R.drawable.rain,
+                             R.drawable.landscape,
+                             R.drawable.flame,
+                             R.drawable.flame_inversed,
+                             R.drawable.fire};
+    private ImageView imageView;
     private Button button, buttonCreate;
     private LinearLayout linearLayout;
     public static final int GALLERY_REQUEST_CODE = 1;
-    public int selected = 1;
+    public int selected = 1; //aici se afla inicele pozei selectate
     String site_ul;
     String avatar = "";
     MediaType MEDIA_TYPE;
+    public int PICTURE_STYLE_WIDTH = 188;
+    public int PICTURE_STYLE_HEIGHT = 250;
 
 
     public void selectImage(View view){
@@ -68,7 +79,7 @@ public class LoadPictureForApplyStyle extends AppCompatActivity {
         String[] primele = new String[2];
         primele[0] = site;
         primele[1] = current_action;
-        String urmatoarele[] = new String[10];
+        String[] urmatoarele = new String[10];
         urmatoarele[0] = "2";
         urmatoarele[1] = "style_id";
         urmatoarele[2] = Integer.toString(selected);
@@ -78,7 +89,8 @@ public class LoadPictureForApplyStyle extends AppCompatActivity {
     private void setStylesView() {
         for (int style : styles) {
             final ImageView imageView = new ImageView(this);
-            imageView.setLayoutParams(new LinearLayout.LayoutParams(400, 400)); // value is in pixels
+            imageView.setLayoutParams(new LinearLayout.LayoutParams(PICTURE_STYLE_WIDTH * 2,
+                PICTURE_STYLE_HEIGHT * 2)); // value is in pixels
             imageView.setBackgroundColor(getResources().getColor(R.color.colorAccent));
 
             imageView.setImageResource(style);
@@ -96,9 +108,10 @@ public class LoadPictureForApplyStyle extends AppCompatActivity {
                             if(v != imageView)
                                 imageView.setPadding(0, 0, 0, 0);
                             else
-                                selected = i;
+                                selected = i+1;
                         }
                     }
+//                    System.out.println(selected);
                 }
             });
             if (linearLayout != null) {
@@ -176,7 +189,7 @@ public class LoadPictureForApplyStyle extends AppCompatActivity {
         site_ul = getApplicationContext().getResources().getString(R.string.site);
         imageView = (ImageView) findViewById(R.id.pictureImageView);
         imageView.setVisibility(View.GONE);
-        stylized_image = (ImageView) findViewById(R.id.stylized_image);
+        ImageView stylized_image = (ImageView) findViewById(R.id.stylized_image);
         stylized_image.setVisibility(View.GONE);
         button = (Button) findViewById((R.id.addImage));
         buttonCreate = (Button) findViewById((R.id.applyStyle));
