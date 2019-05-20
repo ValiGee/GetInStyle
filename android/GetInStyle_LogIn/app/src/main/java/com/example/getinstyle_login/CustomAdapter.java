@@ -53,7 +53,7 @@ class CustomAdapter extends ArrayAdapter<ArrayList<String>> {
         }
         contextRooms = context;
     }
-    String site = "http://192.168.43.61:8000/";
+    String site = this.getContext().getResources().getString(R.string.site);
 
 
     static class ViewHolder {
@@ -80,7 +80,8 @@ class CustomAdapter extends ArrayAdapter<ArrayList<String>> {
             holder.likes_count = (TextView) itemView.findViewById(R.id.likes_count);
 
             //setat valori
-            Picasso.get().load(site + variabile.get(0)).into(holder.photo);
+            Picasso.get().load(site + "/" + variabile.get(0)).into(holder.photo);
+
             holder.likes_count.setText(variabile.get(1));
             holder.id = variabile.get(2);
 
@@ -124,7 +125,7 @@ class CustomAdapter extends ArrayAdapter<ArrayList<String>> {
         protected String doInBackground(String... id) {
             //try {
             try {
-                String site_ul = site + "api/media/" + id[0] + "/like";
+                String site_ul = site + "/api/media/" + id[0] + "/like";
                 Log.e("rasp", site_ul);
                 URL obj = new URL(site_ul);
                 try {
@@ -180,12 +181,14 @@ class CustomAdapter extends ArrayAdapter<ArrayList<String>> {
             {
                 if(myHolder.liked == false)
                 {
+                    Log.e("ceva", "da");
                     myHolder.likes_count.setText(Integer.toString(Integer.parseInt(myHolder.likes_count.getText().toString()) + 1));
                     myHolder.like_button.setImageResource(R.drawable.ic_thumb_up_blue_24dp);
                     myHolder.liked = true;
                 }
                 else
                 {
+                    Log.e("ceva", "nu");
                     myHolder.likes_count.setText(Integer.toString(Integer.parseInt(myHolder.likes_count.getText().toString()) - 1));
                     myHolder.like_button.setImageResource(R.drawable.ic_thumb_up_white_24dp);
                     myHolder.liked = false;
