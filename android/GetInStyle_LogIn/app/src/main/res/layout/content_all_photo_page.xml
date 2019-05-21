@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".AllPhotoPage"
-    tools:showIn="@layout/app_bar_all_photo_page"
-    android:background="@color/colorPrimaryDark">
+    tools:showIn="@layout/app_bar_all_photo_page">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,25 +21,26 @@
             android:layout_height="25dp"
             android:layout_margin="5dp"
             android:orientation="horizontal">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginEnd="5dp"
                 android:fontFamily="@font/lato_black"
+                android:text="@string/sort_by"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/colorPrimaryLight"
-                android:textSize="20sp"
-                android:layout_marginEnd="5dp"
-                android:text="@string/sort_by"/>
+                android:textSize="20sp" />
 
             <Spinner
                 android:id="@+id/spinner1"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_margin="1dp"
                 android:background="#FFFFFF"
                 android:fontFamily="@font/lato_black"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@android:color/black"
-                android:layout_margin="1dp"
                 android:textSize="20sp" />
         </LinearLayout>
 

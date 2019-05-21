@@ -8,16 +8,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.View;
-import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -30,9 +31,27 @@ import okhttp3.Response;
 
 public class SignUpActivity extends AppCompatActivity {
 
-    EditText email, name, password, confirm_password;
-    private ImageView imageView;
     public static final int GALLERY_REQUEST_CODE = 1;
+    EditText email, name, password, confirm_password;
+    String site_ul;
+    String avatar = "";
+    MediaType MEDIA_TYPE;
+    private ImageView imageView;
+
+    public static String getRealPathFromUri(Context context, Uri contentUri) {
+        Cursor cursor = null;
+        try {
+            String[] proj = {MediaStore.Images.Media.DATA};
+            cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,44 +66,24 @@ public class SignUpActivity extends AppCompatActivity {
         imageView.setVisibility(View.GONE);
     }
 
-    public void selectImage(View view){
+    public void selectImage(View view) {
         pickFromGallery();
     }
 
-    public static String getRealPathFromUri(Context context, Uri contentUri) {
-        Cursor cursor = null;
-        try {
-            String[] proj = { MediaStore.Images.Media.DATA };
-            cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
-            return cursor.getString(column_index);
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-    }
-
-    private void pickFromGallery(){
+    private void pickFromGallery() {
         //Create an Intent with action as ACTION_PICK
-        Intent intent=new Intent(Intent.ACTION_PICK);
+        Intent intent = new Intent(Intent.ACTION_PICK);
         // Sets the type as image/*. This ensures only components of type image are selected
         intent.setType("image/*");
         //We pass an extra array with the accepted mime types. This will ensure only components with these MIME types as targeted.
         String[] mimeTypes = {"image/jpeg", "image/png"};
-        intent.putExtra(Intent.EXTRA_MIME_TYPES,mimeTypes);
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
         // Launching the Intent
-        startActivityForResult(intent,GALLERY_REQUEST_CODE);
+        startActivityForResult(intent, GALLERY_REQUEST_CODE);
     }
 
-    String site_ul;
-    String avatar = "";
-    MediaType MEDIA_TYPE;
-
-    public void createAccountOnClick(View view)
-    {
-        if(password.getText().toString().equals(confirm_password.getText().toString())) {
+    public void createAccountOnClick(View view) {
+        if (password.getText().toString().equals(confirm_password.getText().toString())) {
             String site = site_ul + "/api/register";
             String current_action = "Register";
             String[] primele = new String[2];
@@ -101,18 +100,16 @@ public class SignUpActivity extends AppCompatActivity {
             urmatoarele[7] = "password_confirmation";
             urmatoarele[8] = confirm_password.getText().toString();
             new ATask().execute(primele, urmatoarele);
-        }
-        else
+        } else
             Toast.makeText(getApplicationContext(), "The password confirmation does not match!", Toast.LENGTH_LONG).show();
     }
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Result code is RESULT_OK only if the user selects an Image
         if (resultCode == Activity.RESULT_OK)
-            switch (requestCode){
+            switch (requestCode) {
                 case GALLERY_REQUEST_CODE:
                     //data.getData returns the content URI for the selected Image
                     Uri selectedImage = data.getData();
@@ -132,9 +129,9 @@ public class SignUpActivity extends AppCompatActivity {
             mimeType = cr.getType(uri);
         } else {
             String fileExtension = MimeTypeMap.getFileExtensionFromUrl(uri
-                    .toString());
+                .toString());
             mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
-                    fileExtension.toLowerCase());
+                fileExtension.toLowerCase());
         }
         return mimeType;
     }
@@ -144,57 +141,50 @@ public class SignUpActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String[]... urls) {
 
-                String site = urls[0][0];
-                Integer cate = Integer.parseInt(urls[1][0]);
-                MultipartBody.Builder builder = new MultipartBody.Builder();
+            String site = urls[0][0];
+            Integer cate = Integer.parseInt(urls[1][0]);
+            MultipartBody.Builder builder = new MultipartBody.Builder();
 
-                for(int i = 1; i <= cate; i += 2)
-                {
-                    String a = urls[1][i];
-                    String b = urls[1][i + 1];
-                    Log.e("cheie", a);
-                    Log.e("valoare", b);
-                    builder.addFormDataPart(a, b);
-                }
+            for (int i = 1; i <= cate; i += 2) {
+                String a = urls[1][i];
+                String b = urls[1][i + 1];
+                Log.e("cheie", a);
+                Log.e("valoare", b);
+                builder.addFormDataPart(a, b);
+            }
 
-                OkHttpClient client = new OkHttpClient();
-                RequestBody requestBody;
-                if(!avatar.equals(""))
-                {
-                    Log.e("mime_type", MEDIA_TYPE.toString());
-                    String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE};
-                    requestPermissions(permissions,1);
-                    requestBody = builder
-                            .setType(MultipartBody.FORM)
-                            .addFormDataPart("avatar", avatar,
-                                    RequestBody.create(MEDIA_TYPE, new File(avatar)))
-                            .build();
-                }
-                else
-                {
-                    requestBody = builder
-                            .setType(MultipartBody.FORM)
-                            .build();
-                }
+            OkHttpClient client = new OkHttpClient();
+            RequestBody requestBody;
+            if (!avatar.equals("")) {
+                Log.e("mime_type", MEDIA_TYPE.toString());
+                String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+                requestPermissions(permissions, 1);
+                requestBody = builder
+                    .setType(MultipartBody.FORM)
+                    .addFormDataPart("avatar", avatar,
+                        RequestBody.create(MEDIA_TYPE, new File(avatar)))
+                    .build();
+            } else {
+                requestBody = builder
+                    .setType(MultipartBody.FORM)
+                    .build();
+            }
 
-                Request request = new Request.Builder()
-                        .header("Accept", "application/json")
-                        .url(site)
-                        .post(requestBody)
-                        .build();
+            Request request = new Request.Builder()
+                .header("Accept", "application/json")
+                .url(site)
+                .post(requestBody)
+                .build();
 
-                try (Response response = client.newCall(request).execute())
-                {
-                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+            try (Response response = client.newCall(request).execute()) {
+                if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
 
-                    Log.e("a mers", response.body().string());
-                    return "Account created!";
-                }
-                catch(Exception e)
-                {
-                    Log.e("eroare", e.getMessage());
-                    return "Invalid data!";
-                }
+                Log.e("a mers", response.body().string());
+                return "Account created!";
+            } catch (Exception e) {
+                Log.e("eroare", e.getMessage());
+                return "Invalid data!";
+            }
 
         }
 

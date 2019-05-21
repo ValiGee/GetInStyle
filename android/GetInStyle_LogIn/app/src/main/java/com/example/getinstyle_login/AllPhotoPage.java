@@ -3,18 +3,17 @@ package com.example.getinstyle_login;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.util.Log;
-import android.view.View;
-import android.support.v4.view.GravityCompat;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.view.MenuItem;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -35,7 +34,10 @@ import java.util.List;
 public class AllPhotoPage extends AppCompatActivity
     implements NavigationView.OnNavigationItemSelectedListener {
 
-    protected void setSpinner(){
+    String site;
+    String raspuns;
+
+    protected void setSpinner() {
         Spinner spinner = (Spinner) findViewById(R.id.spinner1);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -129,12 +131,10 @@ public class AllPhotoPage extends AppCompatActivity
         return true;
     }
 
-    String site;
-    String raspuns;
-
     public class ATask extends AsyncTask<String[], Void, String> {
 
         String ceva = "";
+
         @Override
         protected String doInBackground(String[]... urls) {
 
@@ -161,25 +161,20 @@ public class AllPhotoPage extends AppCompatActivity
                         }
                         in.close();
 
-                        raspuns= response.toString();
+                        raspuns = response.toString();
                         return "OK";
 
 
-                    }
-                    else
-                    {
+                    } else {
                         Log.e("rasp", "POST request not worked");
                         return "There was a problem getting the data from the server!";
 
                     }
-                } catch (IOException e)
-                {
+                } catch (IOException e) {
                     e.printStackTrace();
 
                 }
-            }
-            catch (MalformedURLException e)
-            {
+            } catch (MalformedURLException e) {
                 Log.e("naspa", "E corupt!");
                 return "There was a problem connecting to the site!";
             }
@@ -189,22 +184,21 @@ public class AllPhotoPage extends AppCompatActivity
         // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(String result) {
-            if(!result.equals("OK"))
+            if (!result.equals("OK"))
                 Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
-            else
-            {
+            else {
                 try {
                     Log.e("raspunsul", raspuns);
                     JSONArray poze = new JSONArray(raspuns);
                     List<ArrayList<String>> pozele = new ArrayList<ArrayList<String>>();
-                    for(int i = 0; i < poze.length(); i++)
-                    {
+                    for (int i = 0; i < poze.length(); i++) {
                         List<String> poza = new ArrayList<String>();
                         poza.add(poze.getJSONObject(i).getString("stylized_path"));
                         poza.add(Integer.toString(poze.getJSONObject(i).getInt("likes_count")));
                         poza.add(Integer.toString(poze.getJSONObject(i).getInt("id")));
                         pozele.add(new ArrayList<String>(poza));
-                    };
+                    }
+                    ;
 
                     ListAdapter myAdapter = new CustomAdapter(AllPhotoPage.this, new ArrayList<>(pozele));
                     ListView lista = findViewById(R.id.lista);
