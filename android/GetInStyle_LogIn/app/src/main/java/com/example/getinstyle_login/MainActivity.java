@@ -66,6 +66,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(MainActivity.this, LoadPictureForApplyStyle.class));
     }
 
+    public void testButtonOnClickTest(View view){
+        startActivity(new Intent(MainActivity.this, AllPhotoPage.class));
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -182,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
             if(result.equals("Logged in successfully!"))
-                startActivity(new Intent(MainActivity.this, MainPage.class));
+                startActivity(new Intent(MainActivity.this, AllPhotoPage.class));
         }
     }
 }

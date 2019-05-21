@@ -88,7 +88,7 @@
                 android:text="@string/logInButtonTitle" />
 
             <Button
-                android:id="@+id/test3"
+                android:id="@+id/test"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
@@ -98,6 +98,23 @@
                 android:background="@color/design_default_color_primary_dark"
                 android:fontFamily="@font/lato_bold"
                 android:onClick="testButtonOnClick"
+                android:padding="10dp"
+                android:text="Go to Upload Page"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimaryLight"
+                tools:ignore="HardcodedText" />
+
+            <Button
+                android:id="@+id/test93"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="25dp"
+                android:background="@color/design_default_color_primary_dark"
+                android:fontFamily="@font/lato_bold"
+                android:onClick="testButtonOnClickTest"
                 android:padding="10dp"
                 android:text="Go to Upload Page"
                 android:textAlignment="center"
