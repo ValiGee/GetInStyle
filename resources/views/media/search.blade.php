@@ -47,7 +47,11 @@
                                                                   @endif
                                                                   onclick="updateLike(event)"
                                                                   data-media-id="{{ $_media->id }}"
-                                                                  data-liked="{{ $_media->liked }}"> {{ $_media->likes_count }}</i></a>
+                                                                  data-liked="{{ $_media->liked }}"
+                                                                  data-popup="tooltip"
+                                                                  data-title="You must be logged in to like"
+                                                                  data-placement="top"
+                                                                  data-trigger="manual"> {{ $_media->likes_count }}</i></a>
                             </li>
                         </ul>
                         <a href="{{ route('media.show', $_media->id) }}" onclick="fixAnchorTagClick(event)" class="heading-text pull-right"><i class="icon-comments position-right"></i> {{ sizeof($_media->comments) }}</a>
@@ -134,6 +138,48 @@
         padding: 0;
     }
 
+    #pagination-links {
+        width: 80%;
+        margin: 0 auto;
+    }
+
+    #pagination-links > ul.pagination {
+        position: relative;
+        left: 40%;
+    }
+
+    #pagination-links > ul.pagination li.active span {
+        background-color: #273246;
+        border-color: #273246;
+    }
+
+    #sort-container {
+        width: 80%;
+        margin: 0 auto;
+        position: relative;
+        left: 30%;
+        bottom: 10px;
+    }
+
+    #sort-container label {
+        font-size: 1.4rem;
+    }
+
+    #sort-column-select, #sort-order-select {
+        max-width: 150px;
+        border-radius: 5px;
+        padding: 5px;
+    }
+
+    /*
+    #sort-column-select > option, #sort-order-select > option {
+        padding: 20px;
+    }
+    */
+
+    .tooltip {
+        min-width: 150px;
+    }
 
     /* TODO: test without this */
     body {
@@ -196,10 +242,15 @@
         function updateLike(e) {
             e.preventDefault();
 
-            if(userId == -1)
-                return;
-
             let _this = e.currentTarget;
+
+            if(userId == -1) {
+                $(_this).tooltip('show');
+                setTimeout(function() {
+                    $(_this).tooltip('hide');
+                }, 800);
+                return;
+            }
 
             // Change like in view
             let liked = _this.dataset.liked;

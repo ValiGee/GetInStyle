@@ -29,7 +29,7 @@
                                                                   @endif
                                                                   onclick="updateLike(event)"
                                                                   data-media-id="{{ $_media->id }}"
-                                                                  data-liked="{{ $_media->liked }}">{{ sizeof($_media->likes) }}</i></a>
+                                                                  data-liked="{{ $_media->liked }}"> {{ sizeof($_media->likes) }}</i></a>
                             </li>
                         </ul>
                         <a href="{{ route('media.show', $_media->id) }}" onclick="fixAnchorTagClick(event)" class="heading-text pull-right"><i class="icon-comments position-right"></i> {{ sizeof($_media->comments) }}</a>

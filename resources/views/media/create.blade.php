@@ -77,10 +77,19 @@
                     <h3 align="center">Like it? Login or Sign Up to save your image.</h3>
                 @else
                     <form id="postImageForm" action="{{ route('media.store') }}" method="POST">
+                        @csrf
                         <input id="postImage_style_id" name="style_id" type="hidden" value="" />
                         <input id="postImage_original_path" name="original_path" type="hidden" value="" />
                         <input id="postImage_stylized_path" name="stylized_path" type="hidden" value="" />
-                        @csrf
+                        <div class="row">
+                            <div class="col-md-4"></div>
+                            <div class="col-md-4">
+                                <div class="content-group-lg">
+                                    <h6 class="text-semibold">Description</h6>
+                                    <textarea name="description" placeholder="Describe your picture here"></textarea>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-md-4"></div>
                             <div class="col-md-4">
@@ -241,6 +250,11 @@
 
         #postImageBtn {
             margin-top: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 65px;
         }
     </style>
 
