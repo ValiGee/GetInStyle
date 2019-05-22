@@ -45,12 +45,23 @@ public class UserPhotos extends AppCompatActivity {
     String raspuns;
     String avatar_raspuns;
     ImageView avatar_img;
-    TextView nume_text, email_text;
+    TextView nume_text, email_text, sort_by, order_by;
+    Spinner ceva, ceva2;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_photo_page);
+        sort_by = findViewById(R.id.sort_by);
+        sort_by.setVisibility(View.GONE);
+        order_by = findViewById(R.id.order_by);
+        order_by.setVisibility(View.GONE);
+        ceva = findViewById(R.id.spinner1);
+        ceva.setVisibility(View.GONE);
+        ceva2 = findViewById(R.id.spinner2);
+        ceva2.setVisibility(View.GONE);
+
         site = getApplicationContext().getResources().getString(R.string.site);
 
         new ATask().execute();

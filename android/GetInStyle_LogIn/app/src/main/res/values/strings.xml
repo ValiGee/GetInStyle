@@ -60,5 +60,6 @@
     <string name="user_page">User page</string>
     <string name="communicate">Communicate</string>
     <string name="title_activity_user_photos">UserPhotos</string>
+    <string name="title_activity_tags">TagsActivity</string>
 
 </resources>

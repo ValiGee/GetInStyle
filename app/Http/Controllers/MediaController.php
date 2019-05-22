@@ -163,6 +163,52 @@ class MediaController extends Controller
         ]);
     }
 
+    public function AndroidSearch(Request $request)
+    {
+        $sortColumn = [
+            'Number of likes' => 'likes_count',
+            'Date' => 'created_at',
+        ];
+
+        $sortOrder = [
+            'Ascending' => 'asc',
+            'Descending' => 'desc',
+        ];
+
+        $sortByColumn = $request->sortColumn ?? 'created_at';
+        $sortByOrder = $request->sortOrder ?? 'desc';
+
+        $tags = $request->tags;
+        //$request->tags is an array containing a single string, all the tags
+        $tagsStr = $tags;
+        $tagsArr = explode(" ", $tagsStr);
+        $tagNames = [];
+        foreach ($tagsArr as $tag) {
+            if ($tag != "") {
+                array_push($tagNames, $tag);
+            }
+        }
+        $tagNames = array_map('strtolower', $tagNames);
+
+        //TODO : find media objects filtering by tagNames. Consider case insensitive names comparison
+        //TODO : also need likes count, comments count, if i liked a media, etc. just like we do in 'index' page
+        $media = Media::whereHas('tags', function ($query) use ($tagNames) {
+            $query->whereIn(DB::raw('lower(name)'), $tagNames);
+        })->withCount('likes')->withCount(['likes as liked' => function ($query) {
+            $query->where('user_id', Auth::check() ? Auth::id() : 0);
+        }])->orderBy($sortByColumn, $sortByOrder);
+
+        if (request()->wantsJson()) {
+            $media = $media->get();
+            return response()->json($media);
+        } else {
+            $userId = Auth::id();
+            $media = $media->paginate(50);
+            $searchPlaceholder = $request->tags[0];
+            return view('media.search', compact('media', 'userId', 'searchPlaceholder', 'tags', 'sortColumn', 'sortOrder', 'sortByColumn', 'sortByOrder'));
+        }
+    }
+
     public function search(SearchMediaRequest $request)
     {
         $sortColumn = [

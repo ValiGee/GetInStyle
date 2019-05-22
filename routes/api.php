@@ -20,8 +20,6 @@ Route::get('media', [
     'as' => 'api.media.index'
 ]);
 
-
-
 Route::post('media/preview', [
     'uses' => 'MediaController@preview',
     'as' => 'api.media.preview'
@@ -43,6 +41,11 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('my_photos', [
         'uses' => 'MediaController@photosAndroid',
         'as' => 'media.photosAndroid'
+    ]);
+
+    Route::get('search', [
+        'as' => 'search',
+        'uses' => 'MediaController@AndroidSearch',
     ]);
 
     Route::get('media/{media}', [
