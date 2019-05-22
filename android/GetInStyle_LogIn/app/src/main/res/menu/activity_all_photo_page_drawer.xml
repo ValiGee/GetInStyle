@@ -17,7 +17,7 @@
         <item
             android:id="@+id/nav_tools"
             android:icon="@drawable/ic_person_black_24dp"
-            android:title="@string/user_page" />
+            android:title="User photos" />
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_menu_manage"

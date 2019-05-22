@@ -49,6 +49,8 @@ public class AllPhotoPage extends AppCompatActivity
     ImageView avatar_img;
     TextView nume_text, email_text;
     NavigationView navigationView;
+    ListView lista;
+    String sortColumn = "";
 
     protected void setSpinner() {
         Spinner spinner = (Spinner) findViewById(R.id.spinner1);
@@ -65,9 +67,11 @@ public class AllPhotoPage extends AppCompatActivity
                 String text = mySpinner.getSelectedItem().toString();
                 //System.out.println(text);
                 if(text.equalsIgnoreCase("date")){
-                    ;
+                    sortColumn = "created_at";
+                    new ATask().execute();
                 }else{
-                    ;
+                    sortColumn = "likes_count";
+                    new ATask().execute();
                 }
             }
 
@@ -166,7 +170,11 @@ public class AllPhotoPage extends AppCompatActivity
 
             try {
                 Log.e("rasp", site);
-                URL obj = new URL(site + "/api/index");
+                URL obj;
+                if(sortColumn.equals(""))
+                    obj = new URL(site + "/api/index");
+                else
+                    obj = new URL(site + "/api/index?sortColumn=" + sortColumn);
                 try {
                     Log.e("rasp", obj.toString());
                     HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -230,7 +238,7 @@ public class AllPhotoPage extends AppCompatActivity
                     }
 
                     ListAdapter myAdapter = new CustomAdapter(AllPhotoPage.this, new ArrayList<>(pozele));
-                    ListView lista = findViewById(R.id.lista);
+                    lista = findViewById(R.id.lista);
                     lista.setAdapter(myAdapter);
 
                 } catch (Throwable t) {
