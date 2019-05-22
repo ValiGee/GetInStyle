@@ -46,7 +46,11 @@
                                                                   @endif
                                                                   onclick="updateLike(event)"
                                                                   data-media-id="{{ $_media->id }}"
-                                                                  data-liked="{{ $_media->liked }}"> {{ $_media->likes_count }}</i></a>
+                                                                  data-liked="{{ $_media->liked }}"
+                                                                  data-popup="tooltip"
+                                                                  data-title="You must be logged in to like"
+                                                                  data-placement="top"
+                                                                  data-trigger="manual"> {{ $_media->likes_count }}</i></a>
                             </li>
                         </ul>
                         <a href="{{ route('media.show', $_media->id) }}" onclick="fixAnchorTagClick(event)" class="heading-text pull-right"><i class="icon-comments position-right"></i> {{ sizeof($_media->comments) }}</a>
@@ -155,6 +159,7 @@
         margin: 0 auto;
         position: relative;
         left: 30%;
+        bottom: 10px;
     }
 
     #sort-container label {
@@ -172,6 +177,10 @@
         padding: 20px;
     }
     */
+
+    .tooltip {
+        min-width: 150px;
+    }
     /* TODO: test without this */
     body {
         margin: 0;
@@ -210,10 +219,15 @@
         function updateLike(e) {
             e.preventDefault();
 
-            if(userId == -1)
-                return;
-
             let _this = e.currentTarget;
+
+            if(userId == -1) {
+                $(_this).tooltip('show');
+                setTimeout(function() {
+                    $(_this).tooltip('hide');
+                }, 800);
+                return;
+            }
 
             // Change like in view
             let liked = _this.dataset.liked;
@@ -224,10 +238,7 @@
             else {
                 likes_count = likes_count - 1;
             }
-            console.log(_this.innerText);
             _this.innerText = ' ' + likes_count;
-            console.log(_this.innerText);
-            console.log(typeof(_this.innerText));
             _this.dataset.liked = 1 - liked;
             _this.classList.toggle('icon-heart5');
             _this.classList.toggle('icon-heart6');

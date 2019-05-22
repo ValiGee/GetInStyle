@@ -38,6 +38,8 @@
                                                                   data-liked="{{ $media->liked }}"> {{ $media->likes_count }}</i></a>
                                 <a href="{{ route('media.show', $media->id) }}" onclick="fixAnchorTagClick(event)" class="heading-text pull-right"><i class="icon-comments position-right"></i> {{ sizeof($media->comments) }}</a>
                                 --}}
+                                {{ $media->description }}
+                                <br />
                                 @foreach($media->tags as $tag)
                                     #{{ $tag->name }}
                                 @endforeach
@@ -194,6 +196,10 @@
             background-color: #1E88E5;
             color: #fff;
             padding: 2px 5px 2px 5px;
+        }
+
+        .reply-submit-a {
+            margin-bottom: 5px;
         }
 
         .media .media-body p:nth-child(3) {
@@ -455,7 +461,7 @@
                 });
                 $('.reply-a').on('click', function(e) {
                     e.preventDefault();
-                });
+                }).hide();
                 $('.media-like').on('click', function(e) {
                     e.preventDefault();
                 });
