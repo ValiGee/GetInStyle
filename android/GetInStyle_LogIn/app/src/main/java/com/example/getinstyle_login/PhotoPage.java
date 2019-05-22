@@ -33,7 +33,7 @@ public class PhotoPage extends AppCompatActivity {
 
     private LinearLayout linearLayout;
     ImageView photo, likes_button;
-    TextView likes_count;
+    TextView likes_count, description;
 
     String image_id;
     String site;
@@ -77,6 +77,7 @@ public class PhotoPage extends AppCompatActivity {
         //taguri =
         likes_count = findViewById(R.id.likes_count);
         likes_button = findViewById(R.id.like_button);
+        description = findViewById(R.id.description);
         Intent intent = getIntent();
         image_id = intent.getStringExtra("image_id");
 
@@ -158,12 +159,17 @@ public class PhotoPage extends AppCompatActivity {
                     String image_path = site + "/" + obiect.getString("stylized_path");
                     String likes_count_text = Integer.toString(obiect.getInt("likes_count"));
                     String liked_text= Integer.toString(obiect.getInt("liked"));
+                    String description_text = obiect.getString("description");
                     JSONArray tags = obiect.getJSONArray("tags");
                     for(int i = 0; i < tags.length(); i++)
                         taguri.add(tags.getJSONObject(i).getString("name"));
                     setTags(taguri);
                     Picasso.get().load(image_path).into(photo);
                     likes_count.setText(likes_count_text);
+                    if(!description_text.equals("null")) {
+                        description.setVisibility(View.VISIBLE);
+                        description.setText(description_text);
+                    }
                     if(!liked_text.equals("0")) {
                         liked = true;
                         likes_button.setImageResource(R.drawable.ic_thumb_up_blue_24dp);

@@ -55,7 +55,7 @@ Route::group(['middleware' => ['auth:api']], function () {
         'as' => 'api.media.delete'
     ]);
 
-    Route::post('media', [
+    Route::post('media/store', [
         'uses' => 'MediaController@store',
         'as' => 'api.media.store'
     ]);

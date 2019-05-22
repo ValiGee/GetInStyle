@@ -21,7 +21,6 @@
     <string name="load_a_new_style">LOAD A NEW STYLE</string>
     <string name="choose_a_photo_from_your_phone">Choose a photo from your phone</string>
     <string name="chooses_photo_for_create_style">Chooses photo for create style</string>
-    <string name="create_style">Create style</string>
     <string name="apply_style">Apply Style</string>
     <string name="image">Image</string>
     <string name="comment_1">Lorem ipsum dolor sit amet, ne duo ornatus placerat, causae melius percipitur cum no, ius in civibus democritum omittantur. Eos nisl mundi facilis eu, quaestio abhorreant quo cu, hinc graecis patrioque mea ad. Est in purto illud iriure, has atqui facilisis ut, ne has delenit graecis atomorum. Eos solet docendi lobortis ea. 1</string>
@@ -35,7 +34,7 @@
         <item>Date</item>
         <item>Number of likes</item>
     </string-array>
-    <string name="title_activity_all_photo_page">AllPhotoPage</string>
+    <string name="title_activity_all_photo_page">GetInStyle</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -51,7 +50,7 @@
     <string name="menu_send">Send</string>
     <string name="search">Search</string>
     <string name="tag">Tag:</string>
-    <string name="newPicture">New</string>
+    <string name="newPicture">New picture</string>
     <string name="user_page">User page</string>
     <string name="communicate">Communicate</string>
 

@@ -183,8 +183,6 @@ public class LoadPictureForApplyStyle extends AppCompatActivity {
         site_ul = getApplicationContext().getResources().getString(R.string.site);
         imageView = (ImageView) findViewById(R.id.pictureImageView);
         imageView.setVisibility(View.GONE);
-        ImageView stylized_image = (ImageView) findViewById(R.id.stylized_image);
-        stylized_image.setVisibility(View.GONE);
         button = (Button) findViewById((R.id.addImage));
         buttonCreate = (Button) findViewById((R.id.applyStyle));
         buttonCreate.setVisibility((View.GONE));

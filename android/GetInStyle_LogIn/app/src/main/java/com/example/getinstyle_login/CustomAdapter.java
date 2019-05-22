@@ -63,9 +63,12 @@ class CustomAdapter extends ArrayAdapter<ArrayList<String>> {
 
         holder.likes_count.setText(variabile.get(1));
         holder.id = variabile.get(2);
-        if(variabile.get(3).equals("0"))
+        if(variabile.get(3).equals("0")) {
             holder.liked = false;
+            holder.like_button.setImageResource(R.drawable.ic_thumb_up_white_24dp);
+        }
         else {
+            Log.e("alta poza", "  " + holder.id);
             holder.liked = true;
             holder.like_button.setImageResource(R.drawable.ic_thumb_up_blue_24dp);
         }

@@ -1,6 +1,7 @@
 package com.example.getinstyle_login;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -119,16 +120,14 @@ public class AllPhotoPage extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_home) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_tools) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        if (id == R.id.nav_home) { // Log out
+            Intent intent = new Intent(AllPhotoPage.this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        } else if (id == R.id.nav_gallery) { // Stylize
+            startActivity(new Intent(AllPhotoPage.this, LoadPictureForStyle.class));
+        } else if (id == R.id.nav_tools) { // User photos
+            
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -204,6 +203,7 @@ public class AllPhotoPage extends AppCompatActivity
                         poza.add(Integer.toString(poze.getJSONObject(i).getInt("likes_count")));
                         poza.add(Integer.toString(poze.getJSONObject(i).getInt("id")));
                         poza.add(Integer.toString(poze.getJSONObject(i).getInt("liked")));
+                        Log.e("poza", Integer.toString(poze.getJSONObject(i).getInt("id")) + "  " + Integer.toString(poze.getJSONObject(i).getInt("liked")));
                         pozele.add(new ArrayList<String>(poza));
                     }
 

@@ -140,7 +140,12 @@ class MediaController extends Controller
             'description' => $request->description,
         ]);
 
-        if ($request->tags) {
+        if($request->android)
+        {
+
+        }
+
+        else if ($request->tags) {
             $tagsList = [];
             foreach ($request->tags as $tag) {
                 $tagsList[] = Tag::firstOrCreate(['name' => $tag])->id;
