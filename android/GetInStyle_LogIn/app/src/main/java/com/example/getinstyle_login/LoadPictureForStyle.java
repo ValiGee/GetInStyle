@@ -54,7 +54,7 @@ public class LoadPictureForStyle extends AppCompatActivity {
     String site_ul;
     String avatar = "";
     String stylized_path, original_path;
-    EditText description;
+    EditText description, tags;
     Button submit;
     MediaType MEDIA_TYPE;
     private int[] styles = {R.drawable.composition_vii,
@@ -117,8 +117,8 @@ public class LoadPictureForStyle extends AppCompatActivity {
         String[] primele = new String[2];
         primele[0] = site;
         primele[1] = current_action;
-        String[] urmatoarele = new String[10];
-        urmatoarele[0] = "8";
+        String[] urmatoarele = new String[11];
+        urmatoarele[0] = "10";
         urmatoarele[1] = "style_id";
         urmatoarele[2] = Integer.toString(selected);
         urmatoarele[3] = "stylized_path";
@@ -127,6 +127,8 @@ public class LoadPictureForStyle extends AppCompatActivity {
         urmatoarele[6] = original_path;
         urmatoarele[7] = "description";
         urmatoarele[8] = description.getText().toString();
+        urmatoarele[9] = "tags";
+        urmatoarele[10] = tags.getText().toString();
         new ATask2().execute(primele, urmatoarele);
     }
 
@@ -241,6 +243,8 @@ public class LoadPictureForStyle extends AppCompatActivity {
         submit.setVisibility((View.GONE));
         description = findViewById(R.id.description);
         description.setVisibility((View.GONE));
+        tags = findViewById(R.id.tags);
+        tags.setVisibility((View.GONE));
         linearLayout = (LinearLayout) findViewById(R.id.styles_container);
     }
 
@@ -305,6 +309,7 @@ public class LoadPictureForStyle extends AppCompatActivity {
                 original_path = ceva.getString("original_path");
                 Picasso.get().load(site_ul + "/" + stylized_path).into(imageView);
                 description.setVisibility((View.VISIBLE));
+                tags.setVisibility(View.VISIBLE);
                 submit.setVisibility((View.VISIBLE));
             } catch (Throwable t) {
                 Log.e("Eroare JSON", t.getMessage());

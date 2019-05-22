@@ -163,6 +163,43 @@ class MediaController extends Controller
         ]);
     }
 
+    public function AndroidStore(Request $request)
+    {
+        if (!file_exists(public_path($request->original_path)) || !file_exists(public_path($request->stylized_path))) {
+            abort(422);
+        }
+
+        // $renamedOriginalPath = str_replace('temp_', '', $request->original_path);
+        // $renamedStylizedPath = str_replace('temp_', '', $request->stylized_path);
+        // Storage::disk('public')->move($request->original_path, $renamedOriginalPath);
+        // Storage::disk('public')->move($request->stylized_path, $renamedStylizedPath);
+
+        $media = Media::create([
+            'user_id' => Auth::id(),
+            'style_id' => $request->style_id,
+            'path' => $request->original_path,
+            'stylized_path' => $request->stylized_path,
+            'description' => $request->description,
+        ]);
+
+
+        if ($request->tags) {
+
+            $tagsList = [];
+            $tagsArr = explode(" ", $request->tags);
+            foreach ($tagsArr as $tag) {
+                $tagsList[] = Tag::firstOrCreate(['name' => $tag])->id;
+            }
+            $media->tags()->sync($tagsList);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Picture saved successfully!',
+            'model' => $media,
+        ]);
+    }
+
     public function AndroidSearch(Request $request)
     {
         $sortColumn = [

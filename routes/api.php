@@ -64,8 +64,8 @@ Route::group(['middleware' => ['auth:api']], function () {
     ]);
 
     Route::post('media/store', [
-        'uses' => 'MediaController@store',
-        'as' => 'api.media.store'
+        'uses' => 'MediaController@AndroidStore',
+        'as' => 'api.media.android_store'
     ]);
 
     Route::post('comments/store', [
