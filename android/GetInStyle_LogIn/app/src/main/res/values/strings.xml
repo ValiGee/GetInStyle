@@ -28,7 +28,7 @@
     <string name="comment_2">Ea inermis senserit honestatis eum, modo illum convenire nec ut, solum maiestatis voluptatibus cum ei. </string>
     <string name="image_details">Image details</string>
     <string name="image_info">Image Info</string>
-    <string name="site">http://192.168.43.61:8000</string>
+    <string name="site">http://10.11.1.64:8000</string>
     <string name="sort_by">Sort by:</string>
 
     <string-array name="sort_criteria">

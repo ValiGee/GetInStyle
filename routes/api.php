@@ -38,6 +38,11 @@ Route::post('register', [
 Route::post('register', ['uses' => 'Auth\RegisterController@register']);
 
 Route::group(['middleware' => ['auth:api']], function () {
+    Route::get('avatar', [
+        'uses' => 'MediaController@getUserAvatar',
+        'as' => 'api.media.avatar'
+    ]);
+
     Route::delete('media/{media}', [
         'uses' => 'MediaController@delete',
         'as' => 'api.media.delete'
@@ -62,6 +67,8 @@ Route::group(['middleware' => ['auth:api']], function () {
         'uses' => 'CommentController@toggleLike',
         'as' => 'api.comments.like',
     ]);
+
+
 });
 
 

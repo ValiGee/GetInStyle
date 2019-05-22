@@ -70,6 +70,16 @@ class MediaController extends Controller
         }
     }
 
+    public function getUserAvatar()
+    {
+        return response()->json([
+            'status' => 'success',
+            'avatar' => Auth::user()->avatar,
+            'name' => Auth::user()->name,
+            'email' => Auth::user()->email,
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *

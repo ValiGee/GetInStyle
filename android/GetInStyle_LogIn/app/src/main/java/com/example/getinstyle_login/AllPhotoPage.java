@@ -1,5 +1,6 @@
 package com.example.getinstyle_login;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -11,16 +12,22 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -36,6 +43,10 @@ public class AllPhotoPage extends AppCompatActivity
 
     String site;
     String raspuns;
+    String avatar_raspuns;
+    ImageView avatar_img;
+    TextView nume_text, email_text;
+    NavigationView navigationView;
 
     protected void setSpinner() {
         Spinner spinner = (Spinner) findViewById(R.id.spinner1);
@@ -52,18 +63,11 @@ public class AllPhotoPage extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_photo_page);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
-            }
-        });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
             this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -74,6 +78,7 @@ public class AllPhotoPage extends AppCompatActivity
 
         site = getApplicationContext().getResources().getString(R.string.site);
         new ATask().execute();
+        new ATask2().execute();
     }
 
     @Override
@@ -207,6 +212,89 @@ public class AllPhotoPage extends AppCompatActivity
                 } catch (Throwable t) {
                     Log.e("Eroare JSON", t.getMessage());
                 }
+            }
+        }
+    }
+
+    public class ATask2 extends AsyncTask<String[], Void, String> {
+
+        String ceva = "";
+
+        @Override
+        protected String doInBackground(String[]... urls) {
+
+            try {
+                String site_ul = site + "/api/avatar";
+                Log.e("rasp", site_ul);
+                URL obj = new URL(site_ul);
+                try {
+                    Log.e("rasp", obj.toString());
+                    HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+                    con.setRequestMethod("GET");
+                    con.setRequestProperty("Authorization",
+                            "Bearer " + MainActivity.access_token);
+                    con.setRequestProperty("Accept",
+                            "application/json");
+
+
+                    int responseCode = con.getResponseCode();
+                    Log.e("rasp", "response code-ul e " + Integer.toString(responseCode));
+                    if (responseCode == HttpURLConnection.HTTP_OK) { //success
+                        BufferedReader in = new BufferedReader(new InputStreamReader(
+                                con.getInputStream()));
+                        String inputLine;
+                        StringBuffer response = new StringBuffer();
+                        while ((inputLine = in.readLine()) != null) {
+                            response.append(inputLine);
+                        }
+                        in.close();
+
+                        avatar_raspuns = response.toString();
+                        Log.e("avatar", avatar_raspuns);
+                        return "OK";
+
+
+                    } else {
+                        Log.e("rasp", "POST request not worked");
+                        return "There was a problem getting the data from the server!";
+
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+
+                }
+            } catch (MalformedURLException e) {
+                Log.e("naspa", "E corupt!");
+                return "There was a problem connecting to the site!";
+            }
+            return "Unknown error!";
+        }
+
+        // onPostExecute displays the results of the AsyncTask.
+        @Override
+        protected void onPostExecute(String result) {
+            if (!result.equals("OK"))
+                Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
+            else {
+
+                try
+                {
+                    JSONObject obiect = new JSONObject(avatar_raspuns);
+                    String avatar = obiect.getString("avatar");
+                    String nume = obiect.getString("name");
+                    String email = obiect.getString("email");
+                    navigationView.getHeaderView(0).invalidate();
+                    avatar_img = navigationView.getHeaderView(0).findViewById(R.id.avatar);
+                    nume_text = navigationView.getHeaderView(0).findViewById(R.id.avatar_name);
+                    email_text = navigationView.getHeaderView(0).findViewById(R.id.avatar_email);
+                    Picasso.get().load(site + "/" + avatar).into(avatar_img);
+                    nume_text.setText(nume);
+                    email_text.setText(email);
+                } catch (Throwable t) {
+                    Log.e("My App", t.getMessage());
+                    Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+                }
+
             }
         }
     }
