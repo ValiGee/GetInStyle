@@ -150,6 +150,28 @@
         border-color: #273246;
     }
 
+    #sort-container {
+        width: 80%;
+        margin: 0 auto;
+        position: relative;
+        left: 30%;
+    }
+
+    #sort-container label {
+        font-size: 1.4rem;
+    }
+
+    #sort-column-select, #sort-order-select {
+        max-width: 150px;
+        border-radius: 5px;
+        padding: 5px;
+    }
+
+    /*
+    #sort-column-select > option, #sort-order-select > option {
+        padding: 20px;
+    }
+    */
     /* TODO: test without this */
     body {
         margin: 0;
