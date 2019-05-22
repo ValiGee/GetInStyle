@@ -206,7 +206,6 @@ public class AllPhotoPage extends AppCompatActivity
                         poza.add(Integer.toString(poze.getJSONObject(i).getInt("liked")));
                         pozele.add(new ArrayList<String>(poza));
                     }
-                    ;
 
                     ListAdapter myAdapter = new CustomAdapter(AllPhotoPage.this, new ArrayList<>(pozele));
                     ListView lista = findViewById(R.id.lista);

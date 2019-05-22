@@ -46,7 +46,7 @@
                                                                   @endif
                                                                   onclick="updateLike(event)"
                                                                   data-media-id="{{ $_media->id }}"
-                                                                  data-liked="{{ $_media->liked }}"></i>{{ $_media->likes_count }}</a>
+                                                                  data-liked="{{ $_media->liked }}"> {{ $_media->likes_count }}</i></a>
                             </li>
                         </ul>
                         <a href="{{ route('media.show', $_media->id) }}" onclick="fixAnchorTagClick(event)" class="heading-text pull-right"><i class="icon-comments position-right"></i> {{ sizeof($_media->comments) }}</a>
@@ -224,7 +224,10 @@
             else {
                 likes_count = likes_count - 1;
             }
+            console.log(_this.innerText);
             _this.innerText = ' ' + likes_count;
+            console.log(_this.innerText);
+            console.log(typeof(_this.innerText));
             _this.dataset.liked = 1 - liked;
             _this.classList.toggle('icon-heart5');
             _this.classList.toggle('icon-heart6');
