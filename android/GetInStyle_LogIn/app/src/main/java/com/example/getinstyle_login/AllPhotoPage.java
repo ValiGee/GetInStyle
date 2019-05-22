@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
@@ -58,7 +59,28 @@ public class AllPhotoPage extends AppCompatActivity
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Spinner mySpinner = (Spinner) findViewById(R.id.spinner1);
+                String text = mySpinner.getSelectedItem().toString();
+                //System.out.println(text);
+                if(text.equalsIgnoreCase("date")){
+                    ;
+                }else{
+                    ;
+                }
+            }
+
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                return;
+            }
+        });
     }
+
+    //    <string-array name="sort_criteria">
+    //        <item>Date</item>
+    //        <item>Number of likes</item>
+    //    </string-array>
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
