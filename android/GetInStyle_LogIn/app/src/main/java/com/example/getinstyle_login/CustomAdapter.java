@@ -1,6 +1,7 @@
 package com.example.getinstyle_login;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -49,7 +50,7 @@ class CustomAdapter extends ArrayAdapter<ArrayList<String>> {
         if (itemView == null) {
             itemView = LayoutInflater.from(contextRooms).inflate(R.layout.activity_photo_page, parent, false);
         }
-        ArrayList<String> variabile = getItem(position);
+        final ArrayList<String> variabile = getItem(position);
 
         holder = new ViewHolder();
         holder.photo = (ImageView) itemView.findViewById(R.id.photo);
@@ -68,6 +69,15 @@ class CustomAdapter extends ArrayAdapter<ArrayList<String>> {
             holder.liked = true;
             holder.like_button.setImageResource(R.drawable.ic_thumb_up_blue_24dp);
         }
+
+        holder.photo.setOnClickListener(new View.OnClickListener() {
+            public void onClick(final View v) {
+                Intent sharingIntent = new Intent(contextRooms, PhotoPage.class);
+                sharingIntent.setType("text/plain");
+                sharingIntent.putExtra("image_id",holder.id);
+                contextRooms.startActivity(sharingIntent);
+            }
+        });
 
         holder.like_button.setOnClickListener(new View.OnClickListener() {
             public void onClick(final View v) {

@@ -46,6 +46,7 @@
 
                         <ImageView
                             android:id="@+id/like_button"
+                            android:onClick="like"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:layout_margin="5dp"

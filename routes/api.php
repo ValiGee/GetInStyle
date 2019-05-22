@@ -20,10 +20,7 @@ Route::get('media', [
     'as' => 'api.media.index'
 ]);
 
-Route::get('media/{media}', [
-    'uses' => 'MediaController@show',
-    'as' => 'api.media.show'
-]);
+
 
 Route::post('media/preview', [
     'uses' => 'MediaController@preview',
@@ -41,6 +38,11 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('index', [
         'uses' => 'MediaController@index',
         'as' => 'api.index'
+    ]);
+
+    Route::get('media/{media}', [
+        'uses' => 'MediaController@show',
+        'as' => 'api.media.show'
     ]);
 
     Route::get('avatar', [
