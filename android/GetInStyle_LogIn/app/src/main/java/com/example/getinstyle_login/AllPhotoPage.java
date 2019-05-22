@@ -50,7 +50,7 @@ public class AllPhotoPage extends AppCompatActivity
     TextView nume_text, email_text;
     NavigationView navigationView;
 
-    protected void setSpinner() {
+    protected void setSpinner1() {
         Spinner spinner = (Spinner) findViewById(R.id.spinner1);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -82,6 +82,33 @@ public class AllPhotoPage extends AppCompatActivity
     //        <item>Number of likes</item>
     //    </string-array>
 
+    protected void setSpinner2() {
+        Spinner spinner = (Spinner) findViewById(R.id.spinner2);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+            R.array.sort_criteria_asc_desc, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Spinner mySpinner = (Spinner) findViewById(R.id.spinner2);
+                String text = mySpinner.getSelectedItem().toString();
+                //System.out.println(text);
+                if(text.equalsIgnoreCase("asc")){
+                    ;
+                }else{
+                    ;
+                }
+            }
+
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                return;
+            }
+        });
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,7 +124,8 @@ public class AllPhotoPage extends AppCompatActivity
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-        setSpinner();
+        setSpinner1();
+        setSpinner2();
 
         site = getApplicationContext().getResources().getString(R.string.site);
         new ATask().execute();
