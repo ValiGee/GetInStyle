@@ -53,5 +53,6 @@
     <string name="newPicture">New picture</string>
     <string name="user_page">User page</string>
     <string name="communicate">Communicate</string>
+    <string name="title_activity_user_photos">UserPhotos</string>
 
 </resources>

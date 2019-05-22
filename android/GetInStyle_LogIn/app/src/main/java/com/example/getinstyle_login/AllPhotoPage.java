@@ -127,7 +127,7 @@ public class AllPhotoPage extends AppCompatActivity
         } else if (id == R.id.nav_gallery) { // Stylize
             startActivity(new Intent(AllPhotoPage.this, LoadPictureForStyle.class));
         } else if (id == R.id.nav_tools) { // User photos
-            
+            startActivity(new Intent(AllPhotoPage.this, UserPhotos.class));
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

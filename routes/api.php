@@ -40,6 +40,11 @@ Route::group(['middleware' => ['auth:api']], function () {
         'as' => 'api.index'
     ]);
 
+    Route::get('my_photos', [
+        'uses' => 'MediaController@photosAndroid',
+        'as' => 'media.photosAndroid'
+    ]);
+
     Route::get('media/{media}', [
         'uses' => 'MediaController@show',
         'as' => 'api.media.show'

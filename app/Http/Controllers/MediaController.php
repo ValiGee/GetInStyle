@@ -70,6 +70,14 @@ class MediaController extends Controller
         }
     }
 
+    public function photosAndroid()
+    {
+        $media = Auth::user()->media()->withCount('likes')->withCount(['likes as liked' => function ($query) {
+            $query->where('user_id', Auth::check() ? Auth::id() : 0);
+        }]);
+        return $media->get();
+    }
+
     public function getUserAvatar()
     {
         return response()->json([
@@ -140,12 +148,7 @@ class MediaController extends Controller
             'description' => $request->description,
         ]);
 
-        if($request->android)
-        {
-
-        }
-
-        else if ($request->tags) {
+        if ($request->tags) {
             $tagsList = [];
             foreach ($request->tags as $tag) {
                 $tagsList[] = Tag::firstOrCreate(['name' => $tag])->id;
