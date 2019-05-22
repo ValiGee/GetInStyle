@@ -50,7 +50,8 @@ public class AllPhotoPage extends AppCompatActivity
     TextView nume_text, email_text;
     NavigationView navigationView;
     ListView lista;
-    String sortColumn = "";
+    String sortColumn = "created_at";
+    String sortOrder = "desc";
 
     protected void setSpinner1() {
         Spinner spinner = (Spinner) findViewById(R.id.spinner1);
@@ -66,7 +67,7 @@ public class AllPhotoPage extends AppCompatActivity
                 Spinner mySpinner = (Spinner) findViewById(R.id.spinner1);
                 String text = mySpinner.getSelectedItem().toString();
                 //System.out.println(text);
-                if(text.equalsIgnoreCase("date")){
+                if(text.equalsIgnoreCase("Date")){
                     sortColumn = "created_at";
                     new ATask().execute();
                 }else{
@@ -100,10 +101,12 @@ public class AllPhotoPage extends AppCompatActivity
                 Spinner mySpinner = (Spinner) findViewById(R.id.spinner2);
                 String text = mySpinner.getSelectedItem().toString();
                 //System.out.println(text);
-                if(text.equalsIgnoreCase("asc")){
-                    ;
+                if(text.equalsIgnoreCase("Asc")){
+                    sortOrder = "asc";
+                    new ATask().execute();
                 }else{
-                    ;
+                    sortOrder = "desc";
+                    new ATask().execute();
                 }
             }
 
@@ -198,11 +201,7 @@ public class AllPhotoPage extends AppCompatActivity
 
             try {
                 Log.e("rasp", site);
-                URL obj;
-                if(sortColumn.equals(""))
-                    obj = new URL(site + "/api/index");
-                else
-                    obj = new URL(site + "/api/index?sortColumn=" + sortColumn);
+                URL obj = new URL(site + "/api/index?sortColumn=" + sortColumn + "&sortOrder=" + sortOrder);
                 try {
                     Log.e("rasp", obj.toString());
                     HttpURLConnection con = (HttpURLConnection) obj.openConnection();
