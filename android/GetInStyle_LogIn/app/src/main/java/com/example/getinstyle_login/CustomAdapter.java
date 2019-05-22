@@ -56,11 +56,18 @@ class CustomAdapter extends ArrayAdapter<ArrayList<String>> {
         holder.like_button = (ImageView) itemView.findViewById(R.id.like_button);
         holder.likes_count = (TextView) itemView.findViewById(R.id.likes_count);
 
+
         //setat valori
         Picasso.get().load(site + "/" + variabile.get(0)).into(holder.photo);
 
         holder.likes_count.setText(variabile.get(1));
         holder.id = variabile.get(2);
+        if(variabile.get(3).equals("0"))
+            holder.liked = false;
+        else {
+            holder.liked = true;
+            holder.like_button.setImageResource(R.drawable.ic_thumb_up_blue_24dp);
+        }
 
         holder.like_button.setOnClickListener(new View.OnClickListener() {
             public void onClick(final View v) {

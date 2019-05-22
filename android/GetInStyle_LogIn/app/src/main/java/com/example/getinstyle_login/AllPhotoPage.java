@@ -145,11 +145,13 @@ public class AllPhotoPage extends AppCompatActivity
 
             try {
                 Log.e("rasp", site);
-                URL obj = new URL(site);
+                URL obj = new URL(site + "/api/index");
                 try {
                     Log.e("rasp", obj.toString());
                     HttpURLConnection con = (HttpURLConnection) obj.openConnection();
                     con.setRequestMethod("GET");
+                    con.setRequestProperty("Authorization",
+                            "Bearer " + MainActivity.access_token);
                     con.setRequestProperty("Accept",
                         "application/json");
 
@@ -201,6 +203,7 @@ public class AllPhotoPage extends AppCompatActivity
                         poza.add(poze.getJSONObject(i).getString("stylized_path"));
                         poza.add(Integer.toString(poze.getJSONObject(i).getInt("likes_count")));
                         poza.add(Integer.toString(poze.getJSONObject(i).getInt("id")));
+                        poza.add(Integer.toString(poze.getJSONObject(i).getInt("liked")));
                         pozele.add(new ArrayList<String>(poza));
                     }
                     ;
